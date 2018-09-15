@@ -1,0 +1,16 @@
+mine:
+class Solution:
+    def majorityElement(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: List[int]
+        """
+        if not nums:
+            return []
+        tmp = len(nums)/3
+        snums = set(nums)
+        res = []
+        for i in snums:
+            if nums.count(i)>tmp:
+                res.append(i)
+        return res

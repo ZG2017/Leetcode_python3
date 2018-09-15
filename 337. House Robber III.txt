@@ -1,0 +1,67 @@
+mine:(TLE, DFS + memorization, actually the same as updated)
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+
+class Solution:
+    def rob(self, root):
+        """
+        :type root: TreeNode
+        :rtype: int
+        """
+        dit_pick = {}
+        dit_not_pick = {}
+        def helper1(root):
+            if not root:
+                return 0
+            if root.left not in dit_not_pick:
+                tmp_1 = dit_not_pick[root.left] = helper2(root.left)
+            else:
+                tmp_1 = dit_not_pick[root.left]
+            if root.right not in dit_not_pick:
+                tmp_2 = dit_not_pick[root.right] = helper2(root.right)
+            else:
+                tmp_2 = dit_not_pick[root.right]
+            return tmp_1 + tmp_2 + root.val
+             
+        def helper2(root):
+            if not root:
+                return 0
+            if root.left not in dit_pick:
+                tmp_1 = dit_pick[root.left] = helper1(root.left)
+            else:
+                tmp_1 = dit_pick[root.left]
+            if root.right not in dit_pick:
+                tmp_2 = dit_pick[root.right] = helper1(root.right)
+            else:
+                tmp_2 = dit_pick[root.right]
+            if root.left not in dit_not_pick:
+                tmp_3 = dit_not_pick[root.left] = helper2(root.left)
+            else:
+                tmp_3 = dit_not_pick[root.left]
+            if root.right not in dit_not_pick:
+                tmp_4 = dit_not_pick[root.right] = helper2(root.right)
+            else:
+                tmp_4 = dit_not_pick[root.right]
+            return max(tmp_1 + tmp_2,tmp_1+tmp_4,tmp_2+tmp_3,tmp_3+tmp_4)
+        return max(helper1(root),helper2(root))
+
+
+
+updated:(DFS, simpler)
+class Solution:
+    def rob(self, root):
+        """
+        :type root: TreeNode
+        :rtype: int
+        """
+        def max_rob_val(root):
+            if not root:
+                return (0, 0)
+            left = max_rob_val(root.left)
+            right = max_rob_val(root.right)
+            return (max(left) + max(right), root.val + left[0] + right[0])
+        return max(max_rob_val(root))

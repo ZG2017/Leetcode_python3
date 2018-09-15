@@ -1,0 +1,100 @@
+mine:(correct but complicated)
+class Solution:
+    def fractionToDecimal(self, numerator, denominator):
+        """
+        :type numerator: int
+        :type denominator: int
+        :rtype: str
+        """
+        if numerator == 0:
+            return "0"
+        if (numerator < 0 and denominator > 0) or (numerator > 0 and denominator < 0):
+            flag = True
+        else:
+            flag = False
+        numerator = abs(numerator)
+        denominator = abs(denominator)
+
+
+        if numerator%denominator == 0 and numerator >= denominator:
+            if flag:
+                return str(-int(numerator/denominator))
+            else:
+                return str(int(numerator/denominator))
+        else:
+            bigger,small = max(numerator,denominator), min(numerator,denominator)
+            remain = bigger%small
+            while True:
+                while remain != 0:
+                    bigger, small = small,remain
+                    remain = bigger%small
+                numerator,denominator = numerator/small,denominator/small
+                if small == 1:
+                    break
+                bigger,small = max(numerator,denominator), min(numerator,denominator)
+            
+            tmp = denominator
+            while tmp%5 == 0:
+                tmp/=5
+            while tmp%2 == 0:
+                tmp/=2
+            if tmp == 1:
+                if flag:
+                    return "-"+str(numerator/denominator)
+                else:
+                    return str(numerator/denominator)
+            else:
+                integer = int(numerator//denominator)
+                numerator = numerator%denominator
+                stack_remain = [numerator]
+                stack_nums = []
+                while True:
+                    numerator *= 10
+                    tmp = str(int(numerator//denominator))
+                    if tmp not in stack_nums or all(i == "0" for i in stack_nums):
+                        stack_nums.append(tmp)
+                        numerator = numerator%denominator
+                        stack_remain.append(numerator)
+                    else:
+                        start_index = stack_nums.index(str(int(numerator//denominator)))
+                        if stack_remain[start_index] == stack_remain[-1]:
+                            nums1 = "".join(stack_nums[:start_index])
+                            nums2 = "("+"".join(stack_nums[start_index:])+")"
+                            break
+                        else:
+                            stack_nums.append(tmp)
+                            numerator = numerator%denominator
+                            stack_remain.append(numerator)
+                if flag:
+                    return "-"+str(integer)+"."+nums1+nums2
+                else:
+                    return str(integer)+"."+nums1+nums2
+
+
+
+updated: (good)
+class Solution(object):
+    def fractionToDecimal(self, numerator, denominator):
+        """
+        :type numerator: int
+        :type denominator: int
+        :rtype: str
+        """
+        sign = '-' if numerator * denominator < 0 else ''
+        numerator,denominator = abs(numerator),abs(denominator)
+        n , remainder = divmod(numerator,denominator)
+        ans = [sign+str(n),'.']
+        table = {}
+        count = 0
+        
+        while remainder not in table:
+            table[remainder] = count
+            n, remainder = divmod(remainder*10, denominator)
+            count += 1
+            ans.append(str(n))
+        
+        index = table[remainder]
+
+        ans.insert(index+2, '(')
+        ans.append( ')')
+        return ''.join(ans).replace('(0)','').rstrip('.')

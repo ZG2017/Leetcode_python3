@@ -1,0 +1,24 @@
+mine:
+class Solution:
+    def rotateRight(self, head, k):
+        """
+        :type head: ListNode
+        :type k: int
+        :rtype: ListNode
+        """ 
+        if not head:
+            return head
+        tmp_node_1 = head
+        tmp_node_2 = head
+        counter = 1
+        while tmp_node_1.next:
+            tmp_node_1 = tmp_node_1.next
+            counter += 1
+        
+        real_time = k%counter
+        for _ in range(counter-1-real_time):
+            tmp_node_2 = tmp_node_2.next
+        tmp_node_1.next = head
+        head = tmp_node_2.next
+        tmp_node_2.next = None
+        return head

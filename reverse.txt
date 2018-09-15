@@ -1,0 +1,44 @@
+my:
+import numpy as np
+class Solution:
+    def reverse(self, x):
+        """
+        :type x: int
+        :rtype: int
+        """
+        aaa = []
+        output = 0
+        if x == 0:
+            return 0
+        
+        if x > 0:
+            aaa.append(1)
+        else:
+            aaa.append(-1)
+        
+        tmp_x = abs(x)
+        for i in range(int(np.log10(abs(x)))+1):
+            aaa.append(tmp_x//(10**(int(np.log10(abs(x)))-i)))
+            tmp_x = tmp_x - 10**(int(np.log10(abs(x)))-i)*aaa[-1]
+        for i in range(int(np.log10(abs(x)))+1):
+            output += aaa[int(np.log10(abs(x)))-i+1]*10**(int(np.log10(abs(x)))-i)
+        if output > 2**31 - 1 or output < -2**31:
+            output = 0
+        return output*aaa[0]
+
+
+updated:
+class Solution:
+    def reverse(self, x):
+        """
+        :type x: int
+        :rtype: int
+        """
+        if x < 0:
+            y = -1 * int(str(-x)[::-1])
+        else:
+            y = int(str(x)[::-1])  
+            
+        if y > 2**31 or y < -2**31:
+            y = 0
+        return y

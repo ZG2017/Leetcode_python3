@@ -1,0 +1,48 @@
+mine:
+class Solution:
+    def numberToWords(self, num):
+        """
+        :type num: int
+        :rtype: str
+        """
+        if num == 0:
+            return "Zero"
+        aaa = {0:"Billion ",1:"Million ",2:"Thousand ",3:""}
+        bbb = {0:{"1":"One Hundred ","2":"Two Hundred ","3":"Three Hundred ","4":"Four Hundred ","5":"Five Hundred ","6":"Six Hundred ",\
+                  "7":"Seven Hundred ","8":"Eight Hundred ","9":"Nine Hundred ","0":""},\
+               1:{"0":"","1":"Ten ","2":"Twenty ","3":"Thirty ","4":"Forty ","5":"Fifty ","6":"Sixty ","7":"Seventy ","8":"Eighty ",\
+                  "9":"Ninety "},\
+               2:{"0":"","1":"One ","2":"Two ","3":"Three ","4":"Four ","5":"Five ","6":"Six ","7":"Seven ","8":"Eight ","9":"Nine "}}
+        ccc = {0:{"1":"One Hundred ","2":"Two Hundred ","3":"Three Hundred ","4":"Four Hundred ","5":"Five Hundred ","6":"Six Hundred ",\
+                  "7":"Seven Hundred ","8":"Eight Hundred ","9":"Nine Hundred ","0":""},\
+               1:{"10":"Ten ","11":"Eleven ","12":"Twelve ","13":"Thirteen ","14":"Fourteen ","15":"Fifteen ","16":"Sixteen ",\
+               "17":"Seventeen ","18":"Eighteen ","19":"Nineteen "}}      
+        cnum = str(num)
+        t = len(cnum)//3
+        r = len(cnum)%3
+        saver = []
+        res = ""
+        if r != 0:
+            saver.append(cnum[0:r])
+        for i in range(t):
+            saver.append(cnum[r+i*3:r+i*3+3])
+        counter_i = 0
+        for i in range(4-len(saver),4):
+            if saver[counter_i] == "000":
+                counter_i += 1
+                continue
+            if len(saver[counter_i]) == 3 and saver[counter_i][1] == "1":
+                res += ccc[0][saver[counter_i][0]]
+                res += ccc[1][saver[counter_i][1:3]]
+            elif len(saver[counter_i]) == 2 and saver[counter_i][0] == "1":
+                res += ccc[1][saver[counter_i]]
+            else:
+                counter_j = 0
+                for j in range(3-len(saver[counter_i]),3):
+                    res += bbb[j][saver[counter_i][counter_j]]
+                    counter_j += 1
+            res += aaa[i]
+            counter_i += 1
+        return res[:-1]
+
+

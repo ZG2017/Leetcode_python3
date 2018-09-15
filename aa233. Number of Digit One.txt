@@ -1,0 +1,80 @@
+mine:  (too complicated)
+class Solution:
+    def countDigitOne(self, n):
+        """
+        :type n: int
+        :rtype: int
+        """
+        if n <= 0:
+            return 0
+        stack = [1]
+        c = 0
+        tmp = n
+        nums = []
+        remain = []
+        res = 0
+        while tmp >= 10:
+            tmp /= 10
+            c += 1
+        total_c = c
+        tmp = n
+        while c >= 0:
+            if c > 1:
+                tmp_sum = sum(stack)
+                stack.append(tmp_sum*9 + 10**(total_c-c+1))
+            i = tmp//(10**c)
+            r = tmp%(10**c)
+            nums.append(i)
+            remain.append(r)
+            tmp = r
+            c -= 1
+        for _ in range(len(nums)-1):
+            i = nums.pop(0)
+            r = remain.pop(0)
+            if i == 1:
+                res += r+1
+            elif i > 1:
+                res += 10**total_c
+            res += i*sum(stack[:total_c])
+            total_c -= 1
+            if r == 0:
+                break
+        i = nums.pop(0)
+        r = remain.pop(0)
+        if i == 0:
+            return res
+        else:
+            return res+1
+
+
+updated: (compute each digit respactively)
+class Solution:
+    def countDigitOne(self, n):
+        """
+        :type n: int
+        :rtype: int
+        """
+        if n <= 0:
+            return 0
+        n = str(n)
+        lens = len(n)
+        time = lens-1
+        res = 0
+        for i in range(lens):
+            if i == 0:
+                front = 0
+            else:
+                front = int(n[:i])
+            if i == lens-1:
+                after = 0
+            else:
+                after = int(n[i+1:])
+            tmp  = front*(10**time)
+            if n[i] == "0":
+                res += tmp
+            elif n[i] == "1":
+                res += tmp + after+1
+            else:
+                res += tmp + 10**time
+            time -= 1
+        return res

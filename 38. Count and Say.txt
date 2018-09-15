@@ -1,0 +1,48 @@
+mine:
+class Solution:
+    def countAndSay(self, n):
+        """
+        :type n: int
+        :rtype: str
+        """
+        j = 0
+        
+        if n == 1:
+            return "1"
+        
+        init = list(self.countAndSay(n-1))
+        tmp = []
+        res = []
+        tmp.append(init[0])
+        for j in range(1,len(init)):
+            if init[j] != init[j-1]:
+                res.append(str(len(tmp)))
+                res.append(tmp[0])
+                tmp = []
+                tmp.append(init[j])
+                continue
+            tmp.append(init[j])
+        res.append(str(len(tmp)))
+        res.append(tmp[0])
+        
+        return "".join(res)
+        
+        
+        """
+        for i in range(n-1):
+            tmp = []
+            tmp_init = []
+            tmp.append(init[0])
+            for j in range(1,len(init)):
+                if init[j] != init[j-1]:
+                    tmp_init.append(str(len(tmp)))
+                    tmp_init.append(tmp[0])
+                    tmp = []
+                    tmp.append(init[j])
+                    continue
+                tmp.append(init[j])
+            tmp_init.append(str(len(tmp)))
+            tmp_init.append(tmp[0])
+            init = tmp_init
+        return "".join(init)
+        """  

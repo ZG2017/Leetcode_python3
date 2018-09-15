@@ -1,0 +1,30 @@
+mine£º
+import string
+class Solution:
+    def isPalindrome(self, s):
+        """
+        :type s: str
+        :rtype: bool
+        """
+        translator = str.maketrans('', '', string.punctuation+' ')
+        s = s.translate(translator)
+        s = s.lower()
+        return s == s[::-1]      
+
+
+
+
+updated:(another way actually the same)
+class Solution:
+    def isPalindrome(self, s):
+        """
+        :type s: str
+        :rtype: bool
+        """
+        for c in string.punctuation:
+            s = s.replace(c, "")
+        s=s.replace(' ','').lower()
+        rev=s[::-1]
+   
+        return s==rev
+

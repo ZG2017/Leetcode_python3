@@ -1,0 +1,30 @@
+mine:
+class Solution:
+    def getSum(self, a, b):
+        """
+        :type a: int
+        :type b: int
+        :rtype: int
+        """
+        return sum([a,b])
+
+
+udpated:
+class Solution:
+    def getSum(self, a, b):
+        """
+        :type a: int
+        :type b: int
+        :rtype: int
+        """
+        MAX = 2**31 - 1
+        mask = 0xffffffff
+        carry = b
+        result = a
+        while carry != 0:
+            temp_result = (result ^ carry) & mask
+            carry = ((result & carry) << 1) & mask
+            result = temp_result
+        if result <= MAX:
+            return result
+        return ~(result ^ mask)

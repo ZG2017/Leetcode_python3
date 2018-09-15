@@ -1,0 +1,86 @@
+my:
+class Solution:
+    def romanToInt(self, s):
+        """
+        :type s: str
+        :rtype: int
+        """
+        str_max = len(s)
+        output = 0
+        counter = 0
+        while counter <= str_max-1:
+            if s[counter] == "I":
+                if counter != str_max-1 and s[counter+1] == "V":
+                    output += 4
+                    counter += 2
+                elif counter != str_max-1 and s[counter+1] == "X":
+                    output += 9
+                    counter += 2
+                else:
+                    output += 1
+                    counter += 1
+                    
+            elif s[counter] == "X":
+                if counter != str_max-1 and s[counter+1] == "L":
+                    output += 40
+                    counter += 2
+                elif counter != str_max-1 and s[counter+1] == "C":
+                    output += 90
+                    counter += 2
+                else:
+                    output += 10
+                    counter += 1
+            
+            elif s[counter] == "C":
+                if counter != str_max-1 and s[counter+1] == "D":
+                    output += 400
+                    counter += 2
+                elif counter != str_max-1 and s[counter+1] == "M":
+                    output += 900
+                    counter += 2
+                else:
+                    output += 100
+                    counter += 1
+            
+            elif s[counter] == "V":
+                output += 5
+                counter += 1
+            elif s[counter] == "L":
+                output += 50
+                counter += 1
+            elif s[counter] == "D":
+                output += 500
+                counter += 1
+            elif s[counter] == "M":
+                output += 1000
+                counter += 1
+                
+        return output
+
+
+updated:
+class Solution:
+    def romanToInt(self, s):
+        """
+        :type s: str
+        :rtype: int
+        """
+        if not s:
+            return 0
+        hmap = {
+            'I': 1,
+            'V': 5,
+            'X': 10,
+            'L': 50,
+            'C': 100,
+            'D': 500,
+            'M': 1000
+        }
+        ans = hmap[s[-1]]
+        for i in range(len(s)-2, -1, -1):
+            if hmap[s[i]] < hmap[s[i+1]]:
+                ans -= hmap[s[i]]
+            else:
+                ans += hmap[s[i]]
+        return ans
+

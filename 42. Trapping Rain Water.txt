@@ -1,0 +1,54 @@
+mine:
+class Solution:
+    def trap(self, height):
+        """
+        :type height: List[int]
+        :rtype: int
+        """
+        height = height + [0]
+        p1 = 0
+        p2 = 1
+        res = 0
+        if height == []:
+            return 0
+        while p2 <= len(height) - 2:
+            if height[p2+1] <= height[p2] and height[p2-1] < height[p2]:
+                mini = min(height[p1],height[p2])
+                for i in range(p1+1,p2):
+                    tmp_res = max(0,mini-height[i])
+                    res += tmp_res
+                    height[i] += tmp_res
+                if height[p2] >= height[p1]:
+                    p1 = p2
+            p2 += 1
+        return res
+
+updated:
+
+class Solution:
+    def trap(self, height):
+        """
+        :type height: List[int]
+        :rtype: int
+        """
+        res = 0
+        height = height + [0]
+        saver = [[] for _ in range(len(height))]
+        tmp_max = height[0]
+        for i in range(len(height)):
+            saver[i].append(tmp_max)
+            if height[i] > tmp_max:
+                tmp_max = height[i]
+        height = height[::-1]
+        saver = saver[::-1]
+        tmp_max = height[0]
+        for i in range(len(height)):
+            saver[i].append(tmp_max)
+            if height[i] > tmp_max:
+                tmp_max = height[i]
+        saver = saver[1:]
+        height = height[1:]
+        
+        for i in range(len(height)):
+            res += max(0,min(saver[i])-height[i])
+        return res

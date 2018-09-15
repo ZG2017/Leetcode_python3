@@ -1,0 +1,54 @@
+mine:
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+
+class Solution:
+    def isSameTree(self, p, q):
+        """
+        :type p: TreeNode
+        :type q: TreeNode
+        :rtype: bool
+        """
+        self.res1 = []
+        self.res2 = []
+        def recursion(root,result):
+            if root == None:
+                return result.append("None")
+            result.append(root.val)
+            recursion(root.left,result)
+            recursion(root.right,result)
+            
+        recursion(p,self.res1)
+        recursion(q,self.res2)
+        print(self.res1)
+        print(self.res2)
+        return self.res1 == self.res2
+
+
+updated: (simpler but actually the same)
+# Definition for a binary tree node.
+# class TreeNode
+#     def __init__(self, x)
+#         self.val = x
+#         self.left = None
+#         self.right = None
+
+class Solution
+    def isSameTree(self, p, q)
+        
+        type p TreeNode
+        type q TreeNode
+        rtype bool
+        
+        
+        if p is None and q is None
+            return True
+        if p is None or q is None
+            return False
+        if p.val == q.val
+            return True and self.isSameTree(p.left, q.left) and self.isSameTree(p.right, q.right)
+        return False

@@ -1,0 +1,35 @@
+mine:
+class Solution:
+    def isAdditiveNumber(self, num):
+        """
+        :type num: str
+        :rtype: bool
+        """
+        if len(num) < 3:
+            return False
+        def helper(s):
+            if not s:
+                return True
+            for i in range(1,len(s)+1):
+                if i >= 2 and s[0] == "0" or (int(s[:i]) > res[-1] + res[-2]):
+                    break
+                if res[-1] + res[-2] == int(s[:i]):
+                    res.append(int(s[:i]))
+                    if helper(s[i:]):
+                        return True
+                    res.pop()
+            return False
+        res = []
+        for i in range(1,len(num)):
+            if i >= 2 and num[0] == "0":
+                continue
+            res.append(int(num[:i]))
+            for j in range(i+1,len(num)):
+                if j-i >= 2 and num[i] == "0":
+                    continue
+                res.append(int(num[i:j]))
+                if helper(num[j:]):
+                    return True
+                res.pop()
+            res.pop()
+        return False

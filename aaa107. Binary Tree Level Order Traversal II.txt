@@ -1,0 +1,64 @@
+mine:
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+
+class Solution:
+    def levelOrderBottom(self, root):
+        """
+        :type root: TreeNode
+        :rtype: List[List[int]]
+        """
+        dit = {}
+        def helper(root,level):
+            if root == None:
+                return 
+            helper(root.left,level+1)
+            helper(root.right,level+1)
+            if level in dit:
+                dit[level].append(root.val)
+            else:
+                dit[level] = [root.val]
+        helper(root,0)
+        res = [i for i in dit.values()]
+        res.reverse()
+        return res
+
+
+
+
+updated:(stack)
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+
+
+#  与 binary tree 的层级遍历一样，返回时用 list(reversed(result))
+class Solution:
+    def levelOrderBottom(self, root):
+        """
+        :type root: TreeNode
+        :rtype: List[List[int]]
+        """
+        res =[]
+        queue = [root]
+        if not root:
+            return res
+        
+        while queue:
+            level = []
+            res.append([n.val for n in queue])
+            for n in queue:
+                if n.left:
+                    level.append(n.left)
+                if n.right:
+                    level.append(n.right)
+            queue= level
+            
+        return (list(reversed(res)))

@@ -1,0 +1,25 @@
+mine:
+class Solution:
+    def combinationSum3(self, k, n):
+        """
+        :type k: int
+        :type n: int
+        :rtype: List[List[int]]
+        """
+        res = []
+        base = [False for n in range(9)]
+        def helper(k,n,tmp):
+            if n == 0 and k == 0:
+                res.append(tmp[1:])
+                return 
+            elif k == 0:
+                return
+            for i in range(tmp[-1],9):
+                if base[i]:
+                    continue
+                else:
+                    base[i] = True
+                    helper(k-1,n-i-1,tmp+[i+1])
+                    base[i] = False
+        helper(k,n,[0])
+        return res

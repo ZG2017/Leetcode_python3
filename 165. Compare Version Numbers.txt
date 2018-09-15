@@ -1,0 +1,24 @@
+mine:
+class Solution:
+    def compareVersion(self, version1, version2):
+        """
+        :type version1: str
+        :type version2: str
+        :rtype: int
+        """
+        tmp1 = version1.split(".")
+        tmp2 = version2.split(".")
+        lens = min(len(tmp1),len(tmp2))
+        for i in range(lens):
+            if int(tmp1[i]) > int(tmp2[i]):
+                return 1
+            elif int(tmp1[i]) < int(tmp2[i]):
+                return -1
+            else:
+                continue
+        if len(tmp1) > len(tmp2):      
+            return 0 if all(int(i) == 0 for i in tmp1[len(tmp2):]) else 1
+        elif len(tmp1) < len(tmp2):
+            return 0 if all(int(i) == 0 for i in tmp2[len(tmp1):]) else -1
+        else:
+            return 0

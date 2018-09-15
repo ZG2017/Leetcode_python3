@@ -1,0 +1,14 @@
+mine:
+class Solution:
+    def singleNumber(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: List[int]
+        """
+        dit = {}
+        for i in nums:
+            if i not in dit:
+                dit[i] = i
+            else:
+                dit.pop(i)
+        return [dit[i] for i in dit]

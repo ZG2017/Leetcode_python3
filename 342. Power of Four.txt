@@ -1,0 +1,11 @@
+mine:
+class Solution(object):
+    def isPowerOfFour(self, num):
+        """
+        :type num: int
+        :rtype: bool
+        """
+        if num <= 0: return False
+        from math import log10
+        return float(int(log10(num)/log10(4))) == log10(num)/log10(4)
+        
