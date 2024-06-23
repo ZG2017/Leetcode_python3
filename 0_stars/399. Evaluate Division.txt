@@ -1,0 +1,33 @@
+import networkx
+class Solution:
+    def helper(self, node1, node2, cur_score, visited):
+        if node1 == node2:
+            return cur_score
+        res = -1.0
+        for i in self.G[node1]:
+            if i not in visited:
+                visited.append(i)
+                tmp = cur_score*self.G[node1][i]["weight"]
+                res = self.helper(i, node2, tmp, visited)
+                if res != -1.0:
+                    return res
+        return res
+
+    def calcEquation(self, equations, values, queries):
+        self.G = networkx.DiGraph()
+        holder = []
+        for idx, equ in enumerate(equations):
+            holder.append((equ[0], equ[1], values[idx]))
+            holder.append((equ[1], equ[0], 1/values[idx]))
+        self.G.add_weighted_edges_from(holder)
+        res = []
+        for item in queries:
+            if item[0] not in self.G or item[1] not in self.G:
+                res.append(-1.0)
+            elif item[0] == item[1]:
+                res.append(1.0)
+            else:
+                res.append(self.helper(item[0], item[1], 1.0, []))
+        return res
+
+# not all case tested

@@ -1,0 +1,72 @@
+bfs: O(n**3):
+class Solution:
+    def maximumDetonation(self, bombs: List[List[int]]) -> int:
+        def is_in(bombs1, bombs2):
+            holder = [False, False]
+            dis = (bombs2[0]-bombs1[0])**2 + (bombs2[1]-bombs1[1])**2
+            if dis <= bombs1[2]**2:
+                holder[0] = True
+            if dis <= bombs2[2]**2:
+                holder[1] = True
+            return holder
+        def bfs(start):
+            visit = set()
+            stack = [start]
+            while stack:
+                cur = stack.pop()
+                visit.add(cur)
+                for i in memo[cur]:
+                    if i in visit:
+                        continue
+                    else:
+                        stack.append(i)
+            return len(visit)
+
+        memo = dict([(i, set()) for i in range(len(bombs))])
+        for i in range(len(bombs)):
+            for j in range(i+1, len(bombs)):
+                tmp = is_in(bombs[i], bombs[j])
+                if tmp[0]:
+                    memo[i].add(j)
+                if tmp[1]:
+                    memo[j].add(i)
+        res = 0
+        for cur_b in range(len(bombs)):
+            tmp_res = bfs(cur_b)
+            if tmp_res > res:
+                res = tmp_res
+        return res
+
+
+dfs: O(n**2)
+class Solution:
+    def maximumDetonation(self, bombs: List[List[int]]) -> int:
+        import collections
+
+        n2nxt = collections.defaultdict(set)
+        lb = len(bombs)
+
+
+        for i in range(lb): # i is source
+            xi, yi, ri = bombs[i]
+
+            for j in range(lb):
+                if i == j: continue
+
+                xj, yj, rj = bombs[j]
+
+                if ri ** 2 >= (xi - xj) ** 2 + (yi - yj) ** 2: # reachable from i
+                    n2nxt[i].add(j)
+        
+        def dfs(n): # return None
+            if n in seen: return
+            seen.add(n)
+            for nxt in n2nxt[n]:
+                dfs(nxt)
+
+        ans = 0
+        for i in range(lb):
+            seen = set()
+            dfs(i)
+            ans = max(ans, len(seen))
+        return ans

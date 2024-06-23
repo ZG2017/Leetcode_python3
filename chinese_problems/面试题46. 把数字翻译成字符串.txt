@@ -1,0 +1,18 @@
+class Solution:
+    def helper(self, cur_trans, remain):
+        if not remain:
+            self.res.add(cur_trans)
+            return
+        if remain[0] == "0":
+            self.helper(cur_trans+self.dic[remain[0]], remain[1:])
+            return 
+        for i in range(min(2, len(remain))):
+            if int(remain[:i+1]) < 26:
+                self.helper(cur_trans+self.dic[remain[:i+1]], remain[i+1:])
+        return 
+    def translateNum(self, num: int) -> int:
+        s = str(num)
+        self.res = set()
+        self.dic = dict([(str(i), chr(97+i)) for i in range(26)])
+        self.helper("", s)
+        return len(self.res)

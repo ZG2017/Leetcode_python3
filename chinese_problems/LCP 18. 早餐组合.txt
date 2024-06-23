@@ -1,0 +1,13 @@
+排序后二分查找
+class Solution:
+    import bisect
+    def breakfastNumber(self, staple: List[int], drinks: List[int], x: int) -> int:
+        staple = sorted(staple)
+        drinks = sorted(drinks)
+
+        res = 0
+        for i in staple:
+            left = x-i
+            tmp = bisect.bisect_right(drinks, left)
+            res += tmp
+        return res%1000000007

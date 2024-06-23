@@ -1,0 +1,28 @@
+import math
+
+try to find a function such that:
+# 1: 1+0
+# 2: 2+0, 1+1
+# ......
+# 5: 5+0, 4+1, 3+2, 3+1+1, 2+2+1, 2+1+1+1, 1+1+1+1+1
+
+class Solution:
+    def __init__(self):
+        self.memo = dict()
+
+    def find_all_comb(self, num):
+        res = 0
+        for i in range(0,num):
+            res += self.helper(0, num, i)
+        return res
+    
+    def helper(self, init, cake, cut):
+        if cut == 0:
+            return 1
+        if (init, cake, cut) in self.memo:
+            return self.memo[(init, cake, cut)]
+        upper = min(init, cake-cut) if init != 0 else cake-cut
+        total = 0
+        for i in range(math.ceil(cake/(cut+1)), upper+1):
+            total += self.helper(i, cake-i, cut-1)
+        return total

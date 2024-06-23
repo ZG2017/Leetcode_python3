@@ -1,0 +1,21 @@
+贪心，每次排序，先做数量多的任务
+class Solution:
+    def leastInterval(self, tasks: List[str], n: int) -> int:
+        holder = dict()
+        for i in tasks:
+            holder[i] = holder.get(i, 0)+1
+        holder = sorted(list(holder.values()), reverse=True)
+        c = 0
+        while holder:
+            pad = max(0, n+1-len(holder))
+            for idx in range(min(n+1, len(holder))):
+                c += 1
+                holder[idx] -= 1
+            holder.sort(reverse=True)
+            if holder:
+                while holder and holder[-1] == 0:
+                    holder.pop()
+            if not holder:
+                break
+            c += pad
+        return c

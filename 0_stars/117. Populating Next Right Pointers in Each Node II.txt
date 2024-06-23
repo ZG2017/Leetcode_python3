@@ -1,0 +1,38 @@
+广度优先
+"""
+# Definition for a Node.
+class Node:
+    def __init__(self, val, left, right, next):
+        self.val = val
+        self.left = left
+        self.right = right
+        self.next = next
+"""
+class Solution:
+    def connect(self, root: 'Node') -> 'Node':
+        if not root:
+            return root
+        root.next = None
+        stack = [(root, 0)]
+        tmp = []
+        cur_level = 0
+        while stack:
+            cur = stack.pop(0)
+            if cur[0].left:
+                stack.append((cur[0].left, cur[1]+1))
+            if cur[0].right:
+                stack.append((cur[0].right, cur[1]+1))
+            if cur_level < cur[1]:
+                for idx in range(len(tmp)-1):
+                    tmp[idx].next = tmp[idx+1]
+                tmp[-1].next = None
+                tmp = [cur[0]]
+                cur_level += 1
+            else:
+                tmp.append(cur[0])
+
+        for idx in range(len(tmp)-1):
+            tmp[idx].next = tmp[idx+1]
+        tmp[-1].next = None
+        return root
+

@@ -1,2 +1,4 @@
-# Leetcode_python3
-solution for Leetcode using python3
+# Leetcode questions solving
+
+The recording of Leetcode algorithm questions solving using python3.
+

@@ -1,0 +1,12 @@
+索引取模
+class Solution:
+    def lastRemaining(self, n: int, m: int) -> int:
+        holder = [i for i in range(n)]
+        idx = 0
+        while len(holder)>1:
+            idx = (idx+m)%(len(holder))-1
+            if idx < 0:
+                idx = len(holder)-1
+            tmp = holder.pop(idx)
+        
+        return holder[0]

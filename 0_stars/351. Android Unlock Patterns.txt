@@ -1,0 +1,50 @@
+class Solution:
+    def numberOfPatterns(self, m: int, n: int) -> int:
+        self.counter = 0
+        self.n = n
+        self.m = m
+        res = 0
+        self.matrix = [[1,2,3],
+                       [4,5,6],
+                       [7,8,9]]
+        self.valid_mapping = {1:{3:2, 7:4, 9:5},
+                              2:{8:5},
+                              3:{1:2, 9:6, 7:5},
+                              4:{6:5},
+                              5:{},
+                              6:{4:5},
+                              7:{1:4, 9:8, 3:5},
+                              8:{2:5},
+                              9:{7:8, 3:6, 1:5}}
+        self.get_valid_next([1], {2,3,4,5,6,7,8,9})
+        res += self.counter * 4
+        self.counter = 0
+        self.get_valid_next([2], {1,3,4,5,6,7,8,9})
+        res += self.counter * 4
+        self.counter = 0
+        self.get_valid_next([5], {1,2,3,4,6,7,8,9})
+        res += self.counter
+        return res
+
+    def check(self, start, end, cur_path):
+        if start == 5:
+            return True
+        if end not in self.valid_mapping[start]:
+            return True
+        elif self.valid_mapping[start][end] in cur_path:
+            return True
+        else:
+            return False
+
+
+    def get_valid_next(self, cur_path, candidates):
+        if len(cur_path) <= self.n and len(cur_path) >= self.m:
+            self.counter += 1
+        if len(cur_path) > self.n or len(candidates) == 0:
+            return
+        for i in candidates:
+            if self.check(cur_path[-1], i, cur_path):
+                cur_candidates = candidates - set([i])
+                self.get_valid_next(cur_path+[i], cur_candidates)
+    
+        

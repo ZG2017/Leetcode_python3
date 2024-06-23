@@ -1,0 +1,38 @@
+class Solution:
+    def strToInt(self, str: str) -> int:
+        tmp = str
+        tmp = tmp.lstrip()
+        if not tmp:
+            return 0
+        if tmp[0] not in "+-1234567890":
+            return 0
+        flag = True
+        if tmp[0] == "-":
+            tmp = tmp[1:]
+            flag = False
+        elif tmp[0] == "+":
+            tmp = tmp[1:]
+
+        res = ""
+        for i in tmp:
+            if i.isdigit():
+                res += i
+            else:
+                break
+        final_res = 0
+        base = 1
+        for i in reversed(res):
+            final_res += base*(ord(i)-48)
+            base *= 10
+        if not flag:
+            final_res = -final_res
+        if flag:
+            if final_res > (1<<31)-1:
+                return (1<<31)-1
+            else:
+                return final_res
+        else:
+            if final_res < -1<<31:
+                return -1<<31
+            else:
+                return final_res

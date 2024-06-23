@@ -1,0 +1,33 @@
+class Solution:
+    def floodFill(self, image: List[List[int]], sr: int, sc: int, newColor: int) -> List[List[int]]:
+        if len(image) == 0 or len(image[0]) == 0:
+            return image
+        self.image = image
+        self.len_row = len(image)
+        self.len_col = len(image[0])
+        self.visited = [[False]*self.len_col for _ in range(self.len_row)]
+        self.original_color = self.image[sr][sc]
+        self.helper(sr, sc, newColor)
+        return self.image
+    
+    def helper(self, sr, sc, newColor):
+        if self.visited[sr][sc]:
+            return 
+        if self.image[sr][sc] == self.original_color:
+            self.image[sr][sc] = newColor
+            self.visited[sr][sc] = True
+            for idx_r, idx_c in self.find_next(sr, sc):
+                self.helper(idx_r, idx_c, newColor)
+    
+    def find_next(self, sr, sc):
+        res = []
+        if sr-1 >=0:
+            res.append((sr-1, sc))
+        if sr+1 < self.len_row:
+            res.append((sr+1, sc))
+        if sc-1 >=0:
+            res.append((sr, sc-1))
+        if sc+1 < self.len_col:
+            res.append((sr, sc+1))
+        return res
+

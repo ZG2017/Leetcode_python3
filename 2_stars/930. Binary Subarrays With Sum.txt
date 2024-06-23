@@ -1,0 +1,16 @@
+prefix sum
+
+class Solution:
+    def numSubarraysWithSum(self, nums: List[int], goal: int) -> int:
+        holder = dict([(0, 1)])
+        prefix = 0
+        res = 0
+        total_sum = 0
+        for i in range(len(nums)):
+            total_sum += nums[i]
+            if total_sum not in holder:
+                holder[total_sum] = 0
+            if total_sum - goal in holder:
+                res += holder[total_sum - goal]
+            holder[total_sum] += 1
+        return res

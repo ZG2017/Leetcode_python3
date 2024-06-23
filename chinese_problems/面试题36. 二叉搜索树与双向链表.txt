@@ -1,0 +1,33 @@
+"""
+# Definition for a Node.
+class Node:
+    def __init__(self, val, left=None, right=None):
+        self.val = val
+        self.left = left
+        self.right = right
+"""
+class Solution:
+    def mid(self, root):
+        if not root:
+            return 
+        self.mid(root.left)
+        self.res.append(root.val)
+        self.holder[root.val] = root
+        self.mid(root.right)
+        return
+
+    def treeToDoublyList(self, root: 'Node') -> 'Node':
+        if not root:
+            return root
+        self.res = []
+        self.holder = dict()
+        self.mid(root)
+        head = self.holder[self.res[0]]
+        for idx in range(len(self.res)):
+            cur_head = self.holder[self.res[idx]]
+            pre_head = self.holder[self.res[idx-1]]
+            cur_head.left = pre_head
+            pre_head.right = cur_head
+        return head
+        
+

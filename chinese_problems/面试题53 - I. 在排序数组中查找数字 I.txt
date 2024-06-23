@@ -1,0 +1,8 @@
+class Solution:
+    def search(self, nums: List[int], target: int) -> int:
+        from collections import Counter
+        c = Counter(nums)
+        if target in c:
+            return c[target]
+        else:
+            return 0

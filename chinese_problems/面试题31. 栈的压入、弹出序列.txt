@@ -1,0 +1,24 @@
+class Solution:
+    def validateStackSequences(self, pushed: List[int], popped: List[int]) -> bool:
+        if not pushed:
+            if not popped:
+                return True
+            else:
+                not False
+        
+        if set(pushed) != set(popped):
+            return False
+        stack = [pushed[0]]
+        p1 = 1
+        p2 = 0
+        while p1 < len(pushed):
+            if not stack or stack[-1] != popped[p2]:
+                stack.append(pushed[p1])
+                p1 += 1
+            else:
+                stack.pop()
+                p2 += 1
+        if popped[p2:] != stack[::-1]:
+            return False
+        else:
+            return True

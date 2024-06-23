@@ -1,0 +1,18 @@
+class Solution:
+    def convertToBase7(self, num: int) -> str:
+        flag = True
+        if num < 0:
+            flag = False
+        num = abs(num)
+        dict_ = dict()
+        for i in range(7):
+            dict_[i] = str(i)
+        res = []
+        while num >= 7:
+            res.append(str(num%7))
+            num = num//7
+        res.append(str(num))
+        if flag:
+            return "".join(reversed(res))
+        else:
+            return "-"+"".join(reversed(res))

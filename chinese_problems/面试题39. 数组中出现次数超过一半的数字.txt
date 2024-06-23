@@ -1,0 +1,9 @@
+class Solution:
+    def majorityElement(self, nums: List[int]) -> int:
+        from collections import Counter
+        import math
+        threshold = math.ceil(len(nums)/2)
+        c = Counter(nums)
+        for i in c:
+            if c[i] >= threshold:
+                return i

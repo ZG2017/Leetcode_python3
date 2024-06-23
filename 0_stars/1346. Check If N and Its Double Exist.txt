@@ -1,0 +1,21 @@
+class Solution:
+    def checkIfExist(self, arr: List[int]) -> bool:
+        sorted_arr = sorted(arr, reverse=True)
+        pos_holder = []
+        neg_holder = []
+        for i in sorted_arr:
+            if i >=0: 
+                pos_holder.append(i)
+            else:
+                neg_holder.append(i)
+        neg_holder = neg_holder[::-1]
+        for list_ in [pos_holder, neg_holder]:   
+            
+            holder = set()
+            for i in list_:
+                if 2*i in holder:
+                    return True
+                else:
+                    holder.add(i)
+        return False
+        

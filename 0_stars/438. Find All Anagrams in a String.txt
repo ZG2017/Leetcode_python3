@@ -1,0 +1,37 @@
+class Solution:
+    def findAnagrams(self, s: str, p: str) -> List[int]:
+        if not s or not p:
+            return []
+        from collections import Counter
+
+        total_c = Counter(list(p))
+
+        letter_set = set(list(p))
+        cur_c = dict([(letter,0) for letter in letter_set])
+
+        total_len_holder = len(p)
+        cur_len_holder = 0
+
+        p1 = 0
+        p2 = 0
+
+        res = []
+        while p1 <= len(s)-len(p) and p2 < len(s):
+            if s[p2] not in letter_set:
+                p2 += 1
+                p1 = p2
+                cur_len_holder = 0
+                cur_c.clear()
+                continue
+            if s[p2] not in cur_c:
+                 cur_c[s[p2]] = 0
+            cur_c[s[p2]] += 1
+            cur_len_holder += 1
+            while cur_c[s[p2]] > total_c[s[p2]]:
+                cur_c[s[p1]] = cur_c[s[p1]] - 1
+                p1 += 1
+                cur_len_holder -= 1
+            if cur_len_holder == total_len_holder:
+                res.append(p1)
+            p2 += 1
+        return res

@@ -1,0 +1,33 @@
+# 递归
+class Solution:
+    def idx_check(self, x,y):
+        if x >= 0 and x < self.m and y >= 0 and y < self.n:
+            tmpx = list(map(int, list(str(x))))
+            tmpy = list(map(int, list(str(y))))
+            if sum(tmpx) + sum(tmpy) > self.k:
+                return False
+            return True
+        return False
+    
+    def get_next(self, x, y):
+        return (x-1, y), (x+1, y), (x, y-1), (x, y+1)
+
+    def helper(self, x, y):
+        for new_x, new_y in self.get_next(x,y):
+            if self.idx_check(new_x, new_y) and (not self.visited[new_x][new_y]):
+                self.visited[new_x][new_y] = True
+                self.c += 1
+                self.helper(new_x, new_y)
+
+    def movingCount(self, m: int, n: int, k: int) -> int:
+        self.m = m 
+        self.n = n
+        self.k = k
+        self.visited = [[False for i in range(self.n)] for j in range(self.m)]
+        if self.k < 0:
+            return 0
+        else:
+            self.visited[0][0] = True
+            self.c = 1
+        self.helper(0,0)
+        return self.c

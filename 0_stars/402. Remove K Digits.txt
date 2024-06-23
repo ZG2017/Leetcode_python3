@@ -1,0 +1,23 @@
+class Solution:
+    def helper(self, num):
+        p_best = 0
+        p_cur = 1
+        while p_cur < len(num):
+            tmp_best = num[p_best+1:p_cur+1]
+            tmp_candidate = num[p_best:p_cur]
+            if tmp_best > tmp_candidate:
+                p_best = p_cur
+            p_cur += 1
+            if p_best < len(num) and p_cur < len(num) and num[p_best] > num[p_cur]:
+                break
+        return p_best
+
+    def removeKdigits(self, num: str, k: int) -> str:
+        for i in range(k):
+            cut = self.helper(num)
+            num = num[:cut] + num[cut+1:]
+        final = num.lstrip("0")
+        if not final:
+            return "0"
+        else:
+            return final

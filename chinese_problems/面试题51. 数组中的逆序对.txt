@@ -1,0 +1,39 @@
+# 并归排序
+class Solution:
+    def merge(self, num1, num2):
+        p1 = 0
+        p2 = 0
+        res = []
+        while p1 < len(num1) and p2 < len(num2):
+            if num1[p1] <= num2[p2]:
+                res.append(num1[p1])
+                p1 += 1
+            else:
+                res.append(num2[p2])
+                self.c += len(num1)-p1
+                p2 += 1
+        while p1 < len(num1):
+            res.append(num1[p1])
+            p1 += 1
+        while p2 < len(num2):
+            res.append(num2[p2])
+            p2 += 1
+        return res
+    
+    def merge_sort(self, nums):
+        if len(nums) == 1:
+            return nums
+        mid = len(nums)//2
+        num1 = nums[:mid]
+        num2 = nums[mid:]
+        res_1 = self.merge_sort(num1)
+        res_2 = self.merge_sort(num2)
+        res = self.merge(res_1, res_2)
+        return res
+
+    def reversePairs(self, nums: List[int]) -> int:
+        if not nums:
+            return 0
+        self.c = 0
+        self.merge_sort(nums)
+        return self.c

@@ -1,0 +1,16 @@
+class Solution:
+    def helper(self, candidates, cur):
+        if not candidates:
+            self.res.add(cur)
+        for idx in range(len(candidates)):
+            self.helper(candidates[:idx]+candidates[idx+1:], cur+candidates[idx])
+        
+
+    def permutation(self, s: str) -> List[str]:
+        if not s:
+            return []
+        self.res = set()
+        self.helper(s, "")
+        return list(self.res)
+
+        

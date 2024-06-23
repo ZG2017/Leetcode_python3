@@ -1,0 +1,21 @@
+class Solution:
+    def findContinuousSequence(self, target: int) -> List[List[int]]:
+        if target in [0, 1, 2]:
+            return []
+        res = []
+        p1 = 1
+        p2 = 2
+        cur_sum = 3
+        while p2 < target and p2 > p1:
+            if cur_sum == target:
+                res.append([i for i in range(p1,p2+1)])
+                p2 += 1
+                cur_sum += p2
+            elif cur_sum < target:
+                p2 += 1
+                cur_sum += p2
+            else:
+                cur_sum -= p1
+                p1 += 1
+
+        return res

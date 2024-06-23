@@ -1,0 +1,10 @@
+class Solution:
+    import re
+    def isNumber(self, s: str) -> bool:
+        s = s.strip()
+        pattern = "^[+-]?(\.\d+|\d+\.?\d*)([eE][+-]?\d+)?$"
+        res = re.match(pattern, s)
+        if res:
+            return True
+        else:
+            return False

@@ -1,0 +1,17 @@
+prefix and suffix
+ref: https://leetcode.com/problems/partition-array-into-disjoint-intervals/discuss/2299217/python-or-Prefix-%2B-Suffix-or-Easy-to-understand
+
+class Solution:
+    def partitionDisjoint(self, nums: List[int]) -> int:
+        prefix = [nums[0] for _ in range(len(nums))]
+        suffix = [nums[-1] for _ in range(len(nums))]
+        
+        for i in range(1, len(nums)):
+            prefix[i] = max(nums[i], prefix[i-1])
+        
+        for i in range(len(nums)-2, -1, -1):
+            suffix[i] = min(nums[i+1], suffix[i+1])
+        
+        for i in range(len(nums)):
+            if prefix[i] <= suffix[i]:
+                return i+1

@@ -1,0 +1,19 @@
+# 位运算，使用异或的交换律
+class Solution:
+    def singleNumbers(self, nums: List[int]) -> List[int]:
+        res = 0
+        for i in nums:
+            res ^= i
+        
+        p = 1
+        while p&res == 0:
+            p = p << 1
+        
+        a = 0
+        b = 0
+        for i in nums:
+            if p&i == 0:
+                a ^= i
+            else:
+                b ^= i
+        return [a,b]

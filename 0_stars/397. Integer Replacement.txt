@@ -1,0 +1,32 @@
+class Solution:
+    def get_flag(self, num):
+        if num == 3:
+            return False
+        num_1 = num+1
+        c_1 = 1
+        while num_1&2 == 0:
+            c_1 += 1
+            num_1>>=1
+        num_2 = num-1
+        c_2 = 1
+        while num_2&2 == 0:
+            c_2 += 1
+            num_2>>=1
+        if c_1 >= c_2:
+            return True
+        else:
+            return False
+
+    def integerReplacement(self, n: int) -> int:
+        c = 0
+        while n != 1:
+            if n&1 == 0:
+                c += 1
+                n = n>>1
+            else:
+                if self.get_flag(n):
+                    n += 1
+                else:
+                    n -= 1
+                c += 1
+        return c

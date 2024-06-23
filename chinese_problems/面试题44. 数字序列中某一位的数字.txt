@@ -1,0 +1,20 @@
+class Solution:
+    def findNthDigit(self, n: int) -> int:
+        bits_per_num = 1
+        time = 1
+        cur_bit = 0  
+        pre_bit = 0
+        base = 9
+        cur_init_num = 1
+        while  n > cur_bit:
+            pre_bit = cur_bit
+            cur_bit += bits_per_num*base*time
+            cur_init_num = 10**(bits_per_num-1)
+            time *= 10
+            bits_per_num += 1
+        final_bits_per_num = bits_per_num - 1
+        tmp = math.ceil((n - pre_bit)/(final_bits_per_num))-1
+        final_num = cur_init_num + tmp
+        n_remain = (n - pre_bit) - final_bits_per_num * tmp
+        final_bit = int(str(final_num)[n_remain-1])
+        return final_bit

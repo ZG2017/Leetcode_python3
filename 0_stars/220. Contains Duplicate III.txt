@@ -24,7 +24,7 @@ class Solution:
         return False
 
 
-updated: (JUST CHANGE TO SET!!!!!!!! WHY??????)
+updated: (JUST CHANGE TO SET!!!!!!!!)
 class Solution:
     def containsNearbyAlmostDuplicate(self, nums, k, t):
         """

@@ -1,0 +1,10 @@
+class Solution:
+    def exchange(self, nums: List[int]) -> List[int]:
+        odd = []
+        even = []
+        for i in nums:
+            if i%2 == 1:
+                odd.append(i)
+            else:
+                even.append(i)
+        return  odd + even

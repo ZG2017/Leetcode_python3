@@ -1,0 +1,6 @@
+给定⼀个⻓度为100的整数数组，数组从0位置开始依次赋从1-199递增的奇数,但是赋值过程中遗漏了⼀个数，导致数组最后⼀位无值可赋，写个函数，传入这个这个初始化的数组，找出遗漏的那个数并打印出来。
+class Solution:
+    def findMissOne(self, nums):
+        ground_true = int((1+199)*((199-1)/2+1)/2)
+        sum_ = sum(nums)
+        return ground_true - sum_

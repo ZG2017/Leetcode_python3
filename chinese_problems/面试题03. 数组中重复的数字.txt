@@ -1,0 +1,8 @@
+class Solution:
+    def findRepeatNumber(self, nums: List[int]) -> int:
+        holder = set()
+        for i in nums:
+            if i not in holder:
+                holder.add(i)
+            else:
+                return i

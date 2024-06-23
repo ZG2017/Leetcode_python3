@@ -1,0 +1,31 @@
+class Solution:
+    def check_increase(self, a, b, c):
+        return True if a < b < c else False
+    def check_decrease(self, a, b, c):
+        return True if a > b > c else False
+    def check_top(self, a, b, c):
+        return True if a < b > c else False
+    
+    def validMountainArray(self, arr: List[int]) -> bool:
+        if len(arr) < 3:
+            return False
+        increase = True
+        for i in range(1, len(arr)-1):
+            if increase:
+                if self.check_increase(arr[i-1], arr[i], arr[i+1]):
+                    continue
+                else:
+                    if self.check_top(arr[i-1], arr[i], arr[i+1]):
+                        increase = False
+                        continue
+                    else:
+                        return False
+            else:
+                if self.check_decrease(arr[i-1], arr[i], arr[i+1]):
+                    continue
+                else:
+                    return False
+        if not increase:
+            return True
+        else:
+            return False

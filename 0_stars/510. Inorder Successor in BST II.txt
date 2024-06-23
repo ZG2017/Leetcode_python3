@@ -1,0 +1,46 @@
+"""
+# Definition for a Node.
+class Node:
+    def __init__(self, val):
+        self.val = val
+        self.left = None
+        self.right = None
+        self.parent = None
+"""
+
+class Solution:
+    def find_smallest(self, root):
+        if not root:
+            return None
+        if not root.left:
+            return root
+        else:
+            return self.find_smallest(root.left)
+    
+    def find_next_parent(self, start_node, cur):
+        if start_node.val < cur:
+            if not start_node.parent:
+                return None
+            else:
+                return self.find_next_parent(start_node.parent, start_node.val)
+        else:
+            if not start_node.right:
+                return start_node
+            else:
+                tmp = self.find_smallest(start_node.right)
+                if start_node.val < tmp.val:
+                    return start_node
+                else:
+                    return tmp 
+
+    def inorderSuccessor(self, node: 'Node') -> 'Node':
+        if not node.right and not node.parent:
+            return None
+        elif not node.right and node.parent:
+            if node.parent.left == node:
+                return node.parent
+            else:
+                return self.find_next_parent(node.parent, node.val)
+        else:
+            return self.find_smallest(node.right)
+

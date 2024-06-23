@@ -1,0 +1,17 @@
+参考：https://leetcode-cn.com/problems/number-of-digit-one/solution/xiang-xi-tong-su-de-si-lu-fen-xi-duo-jie-fa-by-50/
+class Solution:
+    def countDigitOne(self, n: int) -> int:
+        s = str(n)
+        len_s = len(s)
+        c = 0
+        for idx in range(len_s):
+            tmp_saver = 10**(len(s)-idx-1)
+            former = n//(tmp_saver*10)
+            later = n%tmp_saver
+            if s[idx] == "0":
+                c += former*tmp_saver
+            elif s[idx] == "1":
+                c += former*tmp_saver+later+1
+            elif s[idx] > "1":
+                c += (former+1)*tmp_saver
+        return c

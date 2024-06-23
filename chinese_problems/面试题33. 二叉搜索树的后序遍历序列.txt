@@ -1,0 +1,35 @@
+class Solution:
+    def helper(self, cur_list, root_val):
+        if not cur_list or not root_val:
+            return True
+        idx = 0
+        idx_max = -1
+        while idx < len(cur_list):
+            if cur_list[idx] > root_val:
+                idx_max = idx
+                break
+            idx += 1
+        if idx_max == -1:
+            left = cur_list
+            right = []
+        elif idx_max == 0:
+            left = []
+            right = cur_list
+        else:
+            left = cur_list[:idx_max]
+            right = cur_list[idx_max:]
+        for i in left:
+            if i > root_val:
+                return False
+        for i in right:
+            if i < root_val:
+                return False
+        left_res = self.helper(left[:-1], left[-1]) if left else True
+        right_res = self.helper(right[:-1], right[-1]) if right else True
+        return left_res & right_res
+    def verifyPostorder(self, postorder: List[int]) -> bool:
+        if not postorder:
+            return True
+        res = self.helper(postorder[:-1], postorder[-1])
+        return res
+        

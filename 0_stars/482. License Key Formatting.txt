@@ -1,0 +1,9 @@
+class Solution:
+    def licenseKeyFormatting(self, S: str, K: int) -> str:
+        reform = "".join(S.split("-")).upper()
+        remain = len(reform)%K
+        res = reform[:remain]
+        num_each_group = int(len(reform[remain:])/(len(reform)//K)) if len(reform)//K != 0 else 0
+        for i in range(len(reform)//K):
+            res += "-"+reform[remain:][i*num_each_group:(i+1)*num_each_group]
+        return res.strip("-")

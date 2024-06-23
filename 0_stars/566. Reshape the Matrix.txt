@@ -1,0 +1,15 @@
+class Solution:
+    def matrixReshape(self, nums: List[List[int]], r: int, c: int) -> List[List[int]]:
+        original_r = len(nums)
+        original_c = len(nums[0])
+        if original_c == 0 or original_r == 0:
+            return nums
+        if r*c != original_r * original_c:
+            return nums
+        holder = []
+        for i in nums:
+            holder.extend(i)
+        res = []
+        for i in range(r):
+            res.append(holder[i*c:(i+1)*c])
+        return res

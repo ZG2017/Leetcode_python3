@@ -1,0 +1,18 @@
+class Solution:
+    def __init__(self):
+        self.memo = dict()
+    
+    def helper(self, n):
+        if n in self.memo:
+            return self.memo[n]
+        if n == 0:
+            return 0
+        if n == 1:
+            return 1
+        res = (self.fib(n-1)+self.fib(n-2))
+        self.memo[n] = res
+        return res
+
+    def fib(self, n: int) -> int:
+        res = self.helper(n)
+        return res%1000000007
