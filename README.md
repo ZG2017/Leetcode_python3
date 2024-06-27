@@ -2,7 +2,7 @@
 
 The recording of Leetcode algorithm problems solving using python3.
 
-* o_stars: normal questions.
+* 0_stars: normal questions.
 * 1_stars: include tricks.
 * 2_stars: include novel tricks that need attention.
 * 3_stars: review from time to time.
