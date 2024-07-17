@@ -1,19 +1,87 @@
+two pointer, but bad implement
+
 class Solution:
     def characterReplacement(self, s: str, k: int) -> int:
         if not s:
             return 0
-        p1 = 0
-        p2 = 0
-        self.holder = dict()
-        res = 0
-        while p2 < len(s):
-            self.holder[s[p2]] = self.holder.get(s[p2], 0) + 1
-            max_l = max(self.holder, key=self.holder.get)
-            while p2-p1+1-self.holder[max_l] > k:
-                self.holder[s[p1]] -= 1
-                p1 += 1
-                max_l = max(self.holder, key=self.holder.get)
-            res = max(res, p2-p1+1)
-            p2 += 1
-        return res
+        holder = [0]*26
+        holder[ord(s[0])-ord("A")] += 1
+        max_char = s[0]
+        max_count = 1
+        remain_count = 0
+        final_count = 1
+        h, t = 0, 1
+        while h < len(s):
+            if t == h or remain_count <= k:
+                if t+1 <= len(s):
+                    t += 1
+                    cur_char = s[t-1]
+                    holder[ord(cur_char)-ord("A")] += 1
+                    cur_count = holder[ord(cur_char)-ord("A")]
+                    if cur_char == max_char:
+                        max_count += 1
+                        if remain_count <= k:
+                            final_count = max(final_count, remain_count+max_count)
+                    else:
+                        remain_count += 1
+                        if cur_count > max_count:
+                            remain_count = remain_count - cur_count + max_count
+                            max_count = cur_count
+                            max_char = cur_char
+                        if remain_count <= k:
+                            final_count = max(final_count, remain_count+max_count)
+                else:
+                    h += 1
+                    cur_char = s[h-1]
+                    holder[ord(cur_char)-ord("A")] -= 1
+                    if cur_char == max_char:
+                        max_count -= 1
+                    else:
+                        remain_count -= 1
+                        if remain_count <= k:
+                            final_count = max(final_count, remain_count+max_count)
+            elif remain_count > k:
+                h += 1
+                cur_char = s[h-1]
+                holder[ord(cur_char)-ord("A")] -= 1
+                if cur_char == max_char:
+                    max_count -= 1
+                    if max_count < max(holder):
+                        remain_count = remain_count - max(holder) + max_count
+                        max_count = max(holder)
+                        max_char = chr(holder.index(max_count)+ord('A'))
+                else:
+                    remain_count -= 1
+                    if remain_count <= k:
+                        final_count = max(final_count, remain_count+max_count)
+        return final_count
+
+
+
+two pointer, but good implement.
+refer: https://leetcode.com/problems/longest-repeating-character-replacement/solutions/765776/python-two-pointers-process-for-coding-interviews/
+
+def characterReplacement(self, s: str, k: int) -> int:
+
+    l = 0
+    c_frequency = {}
+    longest_str_len = 0
+    for r in range(len(s)):
+
+        if not s[r] in c_frequency:
+            c_frequency[s[r]] = 0
+        c_frequency[s[r]] += 1
+
+        # Replacements cost = cells count between left and right - highest frequency
+        cells_count = r - l + 1
+        if cells_count - max(c_frequency.values()) <= k:
+            longest_str_len = max(longest_str_len, cells_count)
+
+        else:
+            c_frequency[s[l]] -= 1
+            if not c_frequency[s[l]]:
+                c_frequency.pop(s[l])
+            l += 1
+
+    return longest_str_len
 
