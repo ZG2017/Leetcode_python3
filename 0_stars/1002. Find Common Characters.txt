@@ -1,21 +1,23 @@
-字符数组计数
-class Solution:
-    def commonChars(self, A: List[str]) -> List[str]:
-        if not A:
-            return []
-        a = ord("a")
-        holder = [float("inf")]*26
-        char_holder = set(list(A[0]))
-        for word in A:
-            char_holder = char_holder & set(list(word))
-            tmp = dict()
-            for char in list(word):
-                tmp[char] = tmp.get(char, 0)+1
+hashmap
 
-            for char in tmp:
-                holder[ord(char)-a] = min(tmp[char], holder[ord(char)-a])
+class Solution:
+    def commonChars(self, words: List[str]) -> List[str]:
+        from collections import Counter
+        overall_holder = Counter(words[0])
+        for word in words:
+            cur_holder = Counter(word)
+            for char in overall_holder:
+                if char in cur_holder:
+                    overall_holder[char] = min(overall_holder[char], cur_holder[char])
+                else:
+                    overall_holder[char] = 0
         res = []
-        for char in char_holder:
-            for _ in range(holder[ord(char)-a]):
-                res.append(char)
-        return res
+        return overall_holder.elements()
+        # for char in overall_holder:
+        #     if overall_holder[char] != 0:
+        #         for _ in range(overall_holder[char]):
+        #             res.append(char)
+        # return res
+
+
+
