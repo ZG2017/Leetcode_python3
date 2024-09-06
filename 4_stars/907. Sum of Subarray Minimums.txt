@@ -1,0 +1,56 @@
+my original approach (ETL):
+
+class Solution:
+    def sumSubarrayMins(self, arr: List[int]) -> int:
+        res = 0
+        sorted_arr = sorted([(i, idx) for idx, i in enumerate(arr)], key=lambda x: x[0])
+        candidate_gaps = [(0, len(arr))]
+        for real_idx, (cur_n, cur_idx) in enumerate(sorted_arr):
+            for idx, (l, r) in enumerate(candidate_gaps):
+                if l <= cur_idx < r:
+                    break
+            cur_left, cur_right = candidate_gaps.pop(idx)
+            res += (cur_idx - cur_left + 1) * (cur_right - cur_idx) * cur_n
+            if l != cur_idx:
+                candidate_gaps.append((l, cur_idx))
+            if cur_idx+1 != r:
+                candidate_gaps.append((cur_idx+1, r))
+        return int(res % (10**9 + 7))
+
+
+UPDATED:
+use stack to find the control range of each number in the array.
+one pass to find left boundary of the range.
+another pass to find right boundary of the range.
+refer: https://leetcode.com/problems/sum-of-subarray-minimums/solutions/4595335/beats-100-c-java-python-js-explained-with-video-monotonic-stack/?envType=company&envId=amazon&favoriteSlug=amazon-thirty-days
+
+
+class Solution:
+    def sumSubarrayMins(self, arr: List[int]) -> int:
+        n = len(arr)
+        left = [-1] * n
+        right = [n] * n
+        stack = []
+
+        for i, value in enumerate(arr):
+            while stack and arr[stack[-1]] >= value:
+                stack.pop()
+            if stack:
+                left[i] = stack[-1]
+            stack.append(i)
+
+        stack = []
+
+
+        for i in range(n - 1, -1, -1):
+            while stack and arr[stack[-1]] > arr[i]:
+                stack.pop()
+            if stack:
+                right[i] = stack[-1]
+            stack.append(i)
+
+        mod = 10**9 + 7
+
+        result = sum((i - left[i]) * (right[i] - i) * value for i, value in enumerate(arr)) % mod
+
+        return result
