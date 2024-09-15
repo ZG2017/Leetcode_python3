@@ -1,3 +1,7 @@
+# recursive
+
+refer: https://leetcode.com/problems/predict-the-winner/solutions/3826359/concise-min-max-algorithm-with-memoization-in-python-faster-than-95/?envType=company&envId=amazon&favoriteSlug=amazon-thirty-days
+
 class Solution:
     def predictTheWinner(self, nums: List[int]) -> bool:
         @cache
