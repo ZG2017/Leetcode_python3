@@ -1,0 +1,13 @@
+class Solution:
+    def numEquivDominoPairs(self, dominoes: List[List[int]]) -> int:
+        holder = dict()
+        for i,j in dominoes:
+            found = False
+            for k_i, k_j in holder:
+                if (i == k_i and j == k_j) or (j == k_i and i == k_j):
+                    holder[(k_i, k_j)] += 1
+                    found = True
+                    break
+            if not found:
+                holder[(i,j)] = 1
+        return sum([v*(v-1)//2 for v in holder.values()])
