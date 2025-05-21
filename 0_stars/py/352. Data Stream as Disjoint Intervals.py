@@ -1,0 +1,68 @@
+# mine:
+# # Definition for an interval.
+# # class Interval:
+# #     def __init__(self, s=0, e=0):
+# #         self.start = s
+# #         self.end = e
+
+class SummaryRanges:
+
+    def __init__(self):
+        """
+        Initialize your data structure here.
+        """
+        self.aaa = [-2,-2]
+        self.list = [Interval(-2,-2)]
+        
+
+    def addNum(self, val):
+        """
+        :type val: int
+        :rtype: void
+        """
+        import bisect
+        index = bisect.bisect_left(self.aaa,val)
+        tmp = int(index/2)
+        if index >= len(self.aaa):
+            if self.aaa[index-1]+1 < val:
+                self.aaa.append(val)
+                self.aaa.append(val)
+                self.list.append(Interval(val,val))
+            elif self.aaa[index-1]+1 == val:
+                self.aaa[index-1] = val
+                self.list[-1].end = val
+            return
+        elif index%2 != 0:
+            return
+        else:
+            if self.aaa[index] == val:
+                return
+            elif val == self.aaa[index]-1 and val != self.aaa[index-1]+1:
+                self.aaa[index] = self.list[int(index/2)].start = val
+            elif val == self.aaa[index]-1 and val == self.aaa[index-1]+1:
+                self.aaa.pop(index-1)
+                self.aaa.pop(index-1)
+                lower = self.list[tmp-1].start
+                self.list.pop(tmp-1)
+                self.list[tmp-1].start = lower
+            elif val == self.aaa[index-1]+1:
+                self.aaa[index-1] = val
+                self.list[tmp-1].end = val
+            else:
+                self.aaa.insert(index,val)
+                self.aaa.insert(index,val)
+                self.list.insert(tmp,Interval(val,val))
+        return                
+                              
+    def getIntervals(self):
+        """
+        :rtype: List[Interval]
+        """
+        return self.list[1:]
+        
+
+
+# # Your SummaryRanges object will be instantiated and called as such:
+# # obj = SummaryRanges()
+# # obj.addNum(val)
+# # param_2 = obj.getIntervals()

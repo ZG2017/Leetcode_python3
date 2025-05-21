@@ -1,0 +1,28 @@
+# updated: (topo sorted)
+class Solution:
+    def canFinish(self, numCourses, prerequisites):
+        """
+        :type numCourses: int
+        :type prerequisites: List[List[int]]
+        :rtype: bool
+        """
+        dit = [[] for _ in range(numCourses)]
+        indegree = [0 for _ in range(numCourses)]
+        able = []
+        counter = 0
+        for i in prerequisites:
+            indegree[i[0]] -= 1
+            dit[i[1]].append(i[0])
+        for i in range(len(indegree)):
+            if indegree[i] == 0:
+                able.append(i)
+        if not able:
+            return False
+        while able:
+            tmp = able.pop(0)
+            counter += 1
+            for i in dit[tmp]:
+                indegree[i] += 1
+                if indegree[i] == 0:
+                    able.append(i)
+        return counter == numCourses

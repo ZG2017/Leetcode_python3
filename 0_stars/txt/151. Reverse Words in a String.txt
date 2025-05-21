@@ -1,0 +1,29 @@
+mine:
+class Solution(object):
+    def reverseWords(self, s):
+        """
+        :type s: str
+        :rtype: str
+        """
+        bbb = s.split(" ")
+        aaa = []
+        for i in bbb:
+            if i != "":
+                aaa.append(i)
+        aaa.reverse()
+        aaa = " ".join(aaa)
+        return aaa
+
+
+updated:
+class Solution(object):
+    def reverseWords(self, s):
+        """
+        :type s: str
+        :rtype: str
+        """
+        
+        s = s.split(' ')
+        s = [_ for _ in s if _ != '']
+        s = list(reversed(s))
+        return ' '.join(s)

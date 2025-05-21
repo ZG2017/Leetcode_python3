@@ -1,0 +1,37 @@
+# binary search with bisect library
+
+class Solution:
+    def findClosestElements(self, arr: List[int], k: int, x: int) -> List[int]:
+        import bisect
+        if x < arr[0]:
+            return arr[:k]
+        elif x > arr[-1]:
+            return arr[-k:]
+        left_idx = bisect.bisect_left(arr, x)
+        print(left_idx)
+        if arr[left_idx] > x:
+            right_idx = left_idx
+            left_idx -= 1
+        elif arr[left_idx] == x:
+            right_idx = left_idx + 1
+
+        left_res = []
+        right_res = []
+        for i in range(k):
+            if left_idx < 0:
+                right_res.append(arr[right_idx])
+                right_idx += 1
+            elif right_idx > len(arr)-1:
+                left_res.append(arr[left_idx])
+                left_idx -= 1
+            else:
+                tmp_1 = arr[left_idx]
+                tmp_2 = arr[right_idx]
+                if abs(tmp_1-x) <= abs(tmp_2-x):
+                    left_res.append(arr[left_idx])
+                    left_idx -= 1
+                else:
+                    right_res.append(arr[right_idx])
+                    right_idx += 1
+        return left_res[::-1]+right_res
+

@@ -1,0 +1,75 @@
+greedy + heap sort (TLE)
+
+class Solution:
+    def leastInterval(self, tasks: List[str], n: int) -> int:
+        import heapq
+        from collections import Counter
+        c = Counter(tasks)
+        c_list = [(-j, i) for i, j in c.items()]
+        gap_holder = dict([(i, 0) for i in c.keys()])
+        heapq.heapify(c_list)
+        res = 0
+        while c_list:
+            added = False
+            tmp = []
+            while not added:
+                # no task can be added, so add cooling time
+                if not c_list:
+                    res += 1
+                    for i, j in tmp:
+                        heapq.heappush(c_list, (i, j))
+                    for i in gap_holder:
+                        if gap_holder[i] != 0:
+                            gap_holder[i] -= 1
+                    break
+
+                # try add task
+                cur_c, cur_task = heapq.heappop(c_list)
+                if gap_holder[cur_task] > 0:
+                    # not yet cur cur_task
+                    tmp.append((cur_c, cur_task))
+                else:
+                    # add cur_task task
+                    added = True
+                    res += 1
+                    cur_c += 1
+                    if cur_c != 0:
+                        gap_holder[cur_task] = n+1
+                        heapq.heappush(c_list, (cur_c, cur_task))
+                    for i, j in tmp:
+                        heapq.heappush(c_list, (i, j))
+                    for i in gap_holder:
+                        if gap_holder[i] != 0:
+                            gap_holder[i] -= 1
+        return res
+
+
+update: greedy + heap sort, but get rid of 'gap_holder' and add task in every n circle.
+refer: https://leetcode.com/problems/task-scheduler/solutions/5340727/python3-heap-simple-and-optimal/
+
+class Solution:
+    def leastInterval(self, tasks: List[str], n: int) -> int:
+        count = Counter(tasks)
+        heap = []
+        ans = 0
+
+        for i, j in count.items():
+            heapq.heappush(heap, (-1 * j, i))
+
+        while heap:
+            i = 0
+            temp = []
+            while i <= n:
+                ans += 1
+                if heap:
+                    a, b = heapq.heappop(heap)
+                    a += 1
+                    if a < 0:
+                        temp.append((a, b))
+                if not temp:
+                    break
+                i += 1
+            for a, b in temp:
+                heapq.heappush(heap, (a, b))
+
+        return ans

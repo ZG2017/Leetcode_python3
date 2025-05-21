@@ -1,0 +1,12 @@
+# updated:
+class Solution:
+    def subsets(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: List[List[int]]
+        """
+        res = [[]]
+        for nums in nums:
+            res +=  [[nums] + i for i in res]
+        return res
+

@@ -1,0 +1,23 @@
+greedy
+
+refer: https://leetcode.com/problems/find-valid-matrix-given-row-and-column-sums/solutions/5504847/python-greedy-algorithm/
+
+class Solution:
+    def restoreMatrix(self, rowSum: List[int], colSum: List[int]) -> List[List[int]]:
+        m = len(rowSum)
+        n = len(colSum)
+        matrix = [[0] * n for _ in range(m)]
+
+        for i in range(m):
+            for j in range(n):
+                # Determine the value to place in matrix[i][j]
+                value = min(rowSum[i], colSum[j])
+
+                # Place the value in the matrix
+                matrix[i][j] = value
+
+                # Update the row and column sums
+                rowSum[i] -= value
+                colSum[j] -= value
+
+        return matrix

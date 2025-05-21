@@ -1,0 +1,98 @@
+# mine: TLE
+class Solution:
+    def minWindow(self, s, t):
+        """
+        :type s: str
+        :type t: str
+        :rtype: str
+        """
+        index = 0
+        target = tmp_dit = dict(zip(list(t),[0]*len(t)))
+        for i in t:
+            target[i] += 1
+        res = {float("inf"):""}
+        while index < len(s):
+            tmp = index+1
+            tmp_dit = dict(zip(list(t),[0]*len(t)))
+            while True:
+                if s[tmp-1] in tmp_dit:
+                    tmp_dit[s[tmp-1]] +=1         
+                    if all(tmp_dit[i] >= target[i] for i in target):
+                        res[tmp-index] = s[index:tmp]
+                        break
+                tmp += 1
+                if tmp == len(s)+1:
+                    break
+            index +=1
+        return res[min(res)]
+
+
+
+# updated: (two point)
+class Solution:
+    def minWindow(self, s, t):
+        """
+        :type s: str
+        :type t: str
+        :rtype: str
+        """
+        p1 = 0
+        p2 = 0
+        target = dict(zip(list(t),[0]*len(t)))
+        tmp_dit = dict(zip(list(t),[0]*len(t)))
+        for i in t:
+            target[i] += 1
+        min_res = s
+        flag = False
+        while p2 < len(s)+1:
+            if all(tmp_dit[i] >= target[i] for i in target):
+                if p2-p1 <= len(min_res):
+                    min_res = s[p1:p2]
+                    flag = True
+                if s[p1] in tmp_dit:
+                    tmp_dit[s[p1]] -= 1
+                p1 += 1
+            else:
+                p2 += 1
+                if s[p2-1:p2] in tmp_dit:
+                    tmp_dit[s[p2-1:p2]] += 1
+                    
+        if flag:
+            return min_res
+        else:
+            return ""
+
+# updated: (very fast)
+class Solution:
+    def minWindow(self, s, t):
+        """
+        :type s: str
+        :type t: str
+        :rtype: str
+        """
+        if len(t) > len(s) or not set(t).issubset(s): return ''
+        result, res_len  = "", float('inf')
+        
+        tlen, left, totalMatch = len(t), -1, 0
+        dt = {}
+        for c in t:
+            dt[c] = dt.get(c, 0) + 1
+        
+        for right, c in enumerate(s):
+            # print(left, right, s, t, totalMatch, dt, result)
+            dt[c] = dt.get(c, 0) - 1
+            if dt[c] >= 0:               # next must match char
+                totalMatch += 1
+                if totalMatch == tlen:
+                    totalMatch -= 1
+                    left += 1            # move to next must match char
+                    ch = s[left]
+                    while dt[ch] < 0:
+                        dt[ch] += 1
+                        left += 1
+                        ch = s[left]
+                    dt[ch] += 1
+                    if res_len > right - left:
+                        result = s[left: right+1]
+                        res_len = right - left
+        return result

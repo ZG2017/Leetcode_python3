@@ -1,0 +1,19 @@
+# mine:
+class Solution:
+    def partition(self, s):
+        """
+        :type s: str
+        :rtype: List[List[str]]
+        """
+        res = []
+        self.n = len(s)
+        if len(s) <= 1:
+            return [[s]]
+        def helper(strs,tmp,lens):
+            if lens == self.n:
+                res.append(tmp)
+            for i in range(len(strs)):
+                if strs[:i+1] == strs[:i+1][::-1]:
+                    helper(strs[i+1:],tmp +[strs[:i+1]],lens+len(strs[:i+1]))
+        helper(s,[],0)
+        return res

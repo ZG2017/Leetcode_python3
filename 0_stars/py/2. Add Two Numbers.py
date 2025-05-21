@@ -1,0 +1,54 @@
+# mine:
+# # Definition for singly-linked list.
+# # class ListNode:
+# #     def __init__(self, x):
+# #         self.val = x
+# #         self.next = None
+
+class Solution:
+    def addTwoNumbers(self, l1, l2):
+        """
+        :type l1: ListNode
+        :type l2: ListNode
+        :rtype: ListNode
+        """
+        r1 = l1
+        r2 = l2
+        holder = 0
+        res = tmpNode = ListNode(0)
+        while r1 or r2:
+            if r1 and r2:
+                tmp = r1.val + r2.val + holder
+                if tmp >= 10:
+                    tmp -= 10
+                    holder = 1
+                else:
+                    holder = 0
+                tmpNode.next = ListNode(tmp)
+                tmpNode = tmpNode.next
+                r1 = r1.next
+                r2 = r2.next
+            elif r1 and not r2:
+                tmp = r1.val + holder
+                if tmp >= 10:
+                    tmp -= 10
+                    holder = 1
+                else:
+                    holder = 0
+                tmpNode.next = ListNode(tmp)
+                tmpNode = tmpNode.next
+                r1 = r1.next
+            elif not r1 and r2:
+                tmp = r2.val + holder
+                if tmp >= 10:
+                    tmp -= 10
+                    holder = 1
+                else:
+                    holder = 0
+                tmpNode.next = ListNode(tmp)
+                tmpNode = tmpNode.next
+                r2 = r2.next
+        if holder:
+            tmpNode.next = ListNode(holder)
+            tmpNode = tmpNode.next
+        return res.next

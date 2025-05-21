@@ -1,0 +1,25 @@
+class Solution:
+    def numTrees(self, n: int) -> int:
+        self.saver = {i+1:-1 for i in range(n+1)}
+        self.saver[0] = 1
+        counter = self.helper(n)
+        return counter
+    
+    def helper(self, n):
+        if self.saver[n] != -1:
+            return self.saver[n]
+        total = 0
+        for i in range(n):
+            left_count = 0
+            right_count = 0
+            left_count = self.helper(i-0)
+            right_count = self.helper(n-i-1)
+            if left_count == 0:
+                left_count = 1
+            if right_count == 0:
+                right_count = 1
+            total += left_count * right_count
+        if self.saver[n] == -1:
+            self.saver[n] = total
+        return total
+    

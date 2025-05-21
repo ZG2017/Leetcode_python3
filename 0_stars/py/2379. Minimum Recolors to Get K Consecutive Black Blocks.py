@@ -1,0 +1,23 @@
+class Solution:
+    def minimumRecolors(self, blocks: str, k: int) -> int:
+        l_idx = 0
+        r_idx = k
+        cur_w = blocks[l_idx:r_idx].count('W')
+        if len(blocks) == k:
+            return cur_w
+        min_w = 101
+        while r_idx < len(blocks):
+            if cur_w < min_w:
+                min_w = cur_w
+                if min_w == 0:
+                    break
+            if blocks[l_idx] == 'W':
+                cur_w -= 1
+            l_idx += 1
+            r_idx += 1
+            if blocks[r_idx-1] == 'W':
+                cur_w += 1
+            if cur_w < min_w:
+                min_w = cur_w
+        return min_w
+

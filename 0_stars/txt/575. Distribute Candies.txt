@@ -1,0 +1,14 @@
+class Solution:
+    def distributeCandies(self, candies: List[int]) -> int:
+        total_len = len(candies)
+        set_ = set(candies)
+        types = len(set_)
+        if types <= total_len//2:
+            return types
+        sis_c = 0
+        for i in set_:
+            sis_c += 1
+            if sis_c > total_len//2:
+                return total_len//2
+        return sis_c
+                

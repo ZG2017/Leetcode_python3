@@ -1,0 +1,25 @@
+mine:(not enough accruacy: 243 if False)
+class Solution:
+    def isPowerOfThree(self, n):
+        """
+        :type n: int
+        :rtype: bool
+        """
+        if n <= 0:
+            return False
+        import math
+        return float(int(math.log(n)/math.log(3))) == math.log(n)/math.log(3)
+
+
+
+updated:
+class Solution:
+    def isPowerOfThree(self, n):
+        """
+        :type n: int
+        :rtype: bool
+        """
+        if n <= 0:
+            return False
+        import math
+        return float(int(math.log10(n)/math.log10(3))) == math.log10(n)/math.log10(3)

@@ -1,0 +1,65 @@
+# # Definition for a binary tree node.
+# # class TreeNode:
+# #     def __init__(self, x):
+# #         self.val = x
+# #         self.left = None
+# #         self.right = None
+
+class Solution:
+    def deleteNode(self, root: TreeNode, key: int) -> TreeNode:
+        if not root:
+            return root
+        dummy_node = TreeNode(0)
+        dummy_node.left = root
+        direct_indecator = False
+        pre_head = dummy_node
+        cur_head = root
+        while cur_head and cur_head.val != key:
+            if key < cur_head.val:
+                pre_head = cur_head
+                direct_indecator = False
+                cur_head = cur_head.left
+            else:
+                pre_head = cur_head
+                direct_indecator = True
+                cur_head = cur_head.right
+        if not cur_head:
+            return dummy_node.left
+        if cur_head.right: 
+            tmp_pre_head = cur_head
+            tmp_cur_head = cur_head.right
+            while tmp_cur_head.left:
+                tmp_pre_head = tmp_cur_head
+                tmp_cur_head = tmp_cur_head.left
+            if direct_indecator:
+                pre_head.right = tmp_cur_head
+            else:
+                pre_head.left = tmp_cur_head
+            if tmp_pre_head.left == tmp_cur_head:
+                tmp_pre_head.left = tmp_cur_head.right
+            else:
+                tmp_pre_head.right = tmp_cur_head.right
+            tmp_cur_head.left = cur_head.left
+            tmp_cur_head.right = cur_head.right
+        elif cur_head.left: 
+            tmp_pre_head = cur_head
+            tmp_cur_head = cur_head.left
+            while tmp_cur_head.right:
+                tmp_pre_head = tmp_cur_head
+                tmp_cur_head = tmp_cur_head.right
+            if direct_indecator:
+                pre_head.right = tmp_cur_head
+            else:
+                pre_head.left = tmp_cur_head
+            if tmp_pre_head.right == tmp_cur_head:
+                tmp_pre_head.right = tmp_cur_head.left
+            else:
+                tmp_pre_head.left = tmp_cur_head.left
+            tmp_cur_head.left = cur_head.left
+            tmp_cur_head.right = cur_head.right 
+        else:
+            if direct_indecator:
+                pre_head.right = None
+            else:
+                pre_head.left = None
+        return dummy_node.left

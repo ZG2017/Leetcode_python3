@@ -1,0 +1,12 @@
+class Solution:
+    def finalValueAfterOperations(self, operations: List[str]) -> int:
+        mapping = {
+            '--X': lambda x: x-1,
+            'X--': lambda x: x-1,
+            '++X': lambda x: x+1,
+            'X++': lambda x: x+1
+        }
+        x = 0
+        for i in operations:
+            x = mapping[i](x)
+        return x

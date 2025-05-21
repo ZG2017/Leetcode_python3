@@ -1,0 +1,58 @@
+# https://leetcode.com/problems/pour-water/solutions/2978372/dual-priority-queue-beats-97/?languageTags=python3
+
+# Intuition
+# The thought process here is simple once you work the problem out by hand and go through some edge cases, for example, what if there's a/multiple trough, what if theres a/multiple peak before the start and end of the heights?
+
+# Approach
+# Initialize two pointers, one being the left pointer, to the left of k (k-1) and right pointer (k+1).
+# We also want to keep track of the current volume that we've added thus far.
+# While the current volume < volume, we do the following.
+# a. We want to iterate from the left pointer to 0 and add to the left_heap when the left pointer's value is non-increasing.
+# b. We also want to do the same for the right pointer to the end of the list.
+# c. If the left heap's left most value (min) is less than k's height, we pop that and increment that index's value by 1.
+# d. Else if the right heap's left most value (min) is less than k's height, we pop that and increment that index's value by 1.
+# e. Else, we increment k's height by 1.
+# f. Increment current volume by 1.
+# Return the updated heights list.
+# Complexity
+# Time complexity:
+# h = heights
+# v = volume
+# O(hlog(h)*v)
+
+# Insertion and popping from a heap is done in O(log(n)) time, and we do that h times and we also do that v times as well, v is like a ticker.
+
+# Space complexity:
+# O(h) for the two heaps, and O(h) for the resulting list.
+
+
+
+class Solution:
+    def pourWater(self, heights: List[int], volume: int, k: int) -> List[int]:
+        left_heap, right_heap = [], []
+        left_index = k - 1 if k != 0 else k
+        right_index = k + 1 if k != len(heights) - 1 else k
+
+        current_vol = 0
+        new_heights = heights.copy()
+        while current_vol < volume:
+            k_height= new_heights[k]
+            while left_index >= 0 and new_heights[left_index] <= new_heights[left_index + 1] and left_index != k:
+                heapq.heappush(left_heap, (new_heights[left_index], left_index * -1))
+                left_index -= 1
+            while right_index < len(new_heights) and new_heights[right_index] <= new_heights[right_index - 1] and right_index != k:
+                heapq.heappush(right_heap, (new_heights[right_index], right_index))
+                right_index += 1
+            
+            if left_heap and left_heap[0][0] < k_height:
+                h, i = heapq.heappop(left_heap)
+                new_heights[i * -1] += 1
+                heapq.heappush(left_heap, (h + 1, i))
+            elif right_heap and right_heap[0][0] < k_height:
+                h, i = heapq.heappop(right_heap)
+                new_heights[i] += 1
+                heapq.heappush(right_heap, (h + 1, i))
+            else:
+                new_heights[k] += 1
+            current_vol += 1
+        return new_heights

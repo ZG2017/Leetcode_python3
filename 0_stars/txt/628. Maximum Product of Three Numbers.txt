@@ -1,0 +1,26 @@
+class Solution:
+    def maximumProduct(self, nums: List[int]) -> int:
+        nums = sorted(nums)
+        if 0 < nums[-3] <= nums[-2] <= nums[-1]:
+            return max(
+                nums[-3] * nums[-2] * nums[-1],
+                nums[0] * nums[1] * nums[-1],
+            )
+        elif nums[-3] < 0 < nums[-2] <= nums[-1] or nums[-3] <= nums[-2] < 0 < nums[-1]:
+            return nums[0] * nums[1] * nums[-1]
+        elif nums[-3] <= 0 <= nums[-2] <= nums[-1] or nums[-3] <= nums[-2] <= 0 <= nums[-1]:
+            return max(
+                nums[0] * nums[1] * nums[-1],
+                0
+            )
+        elif nums[-3] <= nums[-2] <= nums[-1] <= 0:
+            return nums[-3] * nums[-2] * nums[-1]
+
+
+
+simpler solution:
+
+class Solution:
+    def maximumProduct(self, nums: List[int]) -> int:
+        nums: .sort()
+        return max(nums[0]*nums[1]*nums[-1], nums[-1]*nums[-2]*nums[-3])

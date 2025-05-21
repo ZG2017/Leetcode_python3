@@ -1,0 +1,47 @@
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+
+class Solution:
+    def recoverTree(self, root):
+        """
+        :type root: TreeNode
+        :rtype: void Do not return anything, modify root in-place instead.
+        """
+        def helper(node):
+            if node == None:
+                return []
+            left_l = []
+            right_l = []
+            right_l = helper(node.right)
+            left_l = helper(node.left)
+            return left_l+[node.val]+right_l
+        
+        def recursion(node):
+            if node == None:
+                return 
+            recursion(node.left)
+            if node.val == tmp_1:
+                node.val = tmp_2
+            elif node.val == tmp_2:
+                node.val = tmp_1
+            recursion(node.right)
+            
+        total = helper(root)
+        holder = []
+        tmp_1 = 0
+        tmp_2 = 0
+        for i in range(1,len(total)):
+            if total[i] < total[i-1]:
+                holder.append(total[i-1])
+                holder.append(total[i])
+        if len(holder) == 2:
+            tmp_1 = holder[0]
+            tmp_2 = holder[1]
+        elif len(holder) == 4:
+            tmp_1 = holder[0]
+            tmp_2 = holder[3]
+        recursion(root) 

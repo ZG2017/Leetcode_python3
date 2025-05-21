@@ -1,0 +1,51 @@
+# mine:
+class Solution:
+    def getHint(self, secret, guess):
+        """
+        :type secret: str
+        :type guess: str
+        :rtype: str
+        """
+        AC = 0
+        BC = 0
+        dit = {}
+        saver = {"0":[],"1":[],"2":[],"3":[],"4":[],"5":[],"6":[],"7":[],"8":[],"9":[]}
+        for i in range(len(secret)):
+            saver[secret[i]].append(i)
+        for i in range(len(guess)):
+            tmp = guess[i]
+            if tmp == secret[i]:
+                AC += 1
+                dit[i] = i
+                saver[tmp].remove(i)
+                continue
+            else:
+                for index in saver[tmp]:
+                    if tmp == secret[index] and index not in dit and secret[index] != guess[index]:
+                        dit[index] = i
+                        saver[tmp]
+                        BC += 1
+                        break
+        return str(AC)+"A"+str(BC)+"B"
+
+
+
+# updated:
+class Solution:
+    def getHint(self, secret, guess):
+        """
+        :type secret: str
+        :type guess: str
+        :rtype: str
+        """
+        secret_dict = {x : secret.count(x) for x in "0123456789"}
+        guess_dict  = {x : guess.count(x) for x in "0123456789"}
+        A_count , B_count = 0, 0
+        length = len(secret)
+        for l in "0123456789":
+            if secret_dict[l] > 0 and guess_dict[l] > 0:
+                B_count += secret_dict[l] if secret_dict[l] <= guess_dict[l] else guess_dict[l]
+        for i in range(length):
+            if secret[i] == guess[i]:
+                A_count += 1
+        return str(A_count) + "A" + str(B_count-A_count) + "B"

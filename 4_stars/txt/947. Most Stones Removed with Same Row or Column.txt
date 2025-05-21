@@ -1,0 +1,64 @@
+union and find
+
+class Solution:
+    def removeStones(self, stones: List[List[int]]) -> int:
+        holder = [i for i in range(len(stones))]
+        def union(x, y):
+            root_x = find(x)
+            root_y = find(y)
+            holder[root_y] = root_x
+
+        def find(x):
+            if holder[x] != x:
+                return find(holder[x])
+            else:
+                return x
+
+        for i in range(len(stones)):
+            for j in range(i+1, len(stones)):
+                if stones[i][0] == stones[j][0] or stones[i][1] == stones[j][1]:
+                    union(i, j)
+        return len(stones)-len(set([find(i) for i in holder]))
+
+
+dfs
+
+refer: https://leetcode.com/problems/most-stones-removed-with-same-row-or-column/solutions/5705026/python-dfs/
+
+
+class Solution:
+    def removeStones(self, stones: List[List[int]]) -> int:
+        # To store the graph connections
+        graph = {}
+
+        # Build the graph
+        for x, y in stones:
+            if x not in graph:
+                graph[x] = []
+            if ~y not in graph:
+                graph[~y] = []
+            graph[x].append(~y)
+            graph[~y].append(x)
+
+        # To track visited nodes
+        visited = set()
+
+        def dfs(node):
+            stack = [node]
+            while stack:
+                current = stack.pop()
+                if current not in visited:
+                    visited.add(current)
+                    for neighbor in graph[current]:
+                        if neighbor not in visited:
+                            stack.append(neighbor)
+
+        # Counting connected components
+        components = 0
+        for x, y in stones:
+            if x not in visited:
+                dfs(x)
+                components += 1
+
+        # The number of stones that can be removed is total stones minus the number of connected components
+        return len(stones) - components

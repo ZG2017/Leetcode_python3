@@ -1,0 +1,73 @@
+class Solution:
+    def findAnagrams(self, s: str, p: str) -> List[int]:
+        if not s or not p:
+            return []
+        from collections import Counter
+
+        total_c = Counter(list(p))
+
+        letter_set = set(list(p))
+        cur_c = dict([(letter,0) for letter in letter_set])
+
+        total_len_holder = len(p)
+        cur_len_holder = 0
+
+        p1 = 0
+        p2 = 0
+
+        res = []
+        while p1 <= len(s)-len(p) and p2 < len(s):
+            if s[p2] not in letter_set:
+                p2 += 1
+                p1 = p2
+                cur_len_holder = 0
+                cur_c.clear()
+                continue
+            if s[p2] not in cur_c:
+                 cur_c[s[p2]] = 0
+            cur_c[s[p2]] += 1
+            cur_len_holder += 1
+            while cur_c[s[p2]] > total_c[s[p2]]:
+                cur_c[s[p1]] = cur_c[s[p1]] - 1
+                p1 += 1
+                cur_len_holder -= 1
+            if cur_len_holder == total_len_holder:
+                res.append(p1)
+            p2 += 1
+        return res
+
+# updated at 20240909: sliding window
+class Solution:
+    def findAnagrams(self, s: str, p: str) -> List[int]:
+        from collections import Counter
+        if len(s) < len(p):
+            return []
+        target_holder = Counter(p)
+        cur_holder = dict([(chr(c), 0) for c in range(ord('a'), ord('a')+26)])
+        check_holder = set([])
+        res = []
+        for c in s[:len(p)]:
+            cur_holder[c] += 1
+        for c in cur_holder:
+            if cur_holder[c] != target_holder[c]:
+                check_holder.add(c)
+        if len(check_holder) == 0:
+            res.append(0)
+        pre_c = s[0]
+        for i in range(1, len(s)-len(p)+1):
+            cur_holder[pre_c] -= 1
+            if cur_holder[pre_c] == target_holder[pre_c]:
+                check_holder.remove(pre_c)
+            else:
+                check_holder.add(pre_c)
+            new_c = s[i+len(p)-1]
+            cur_holder[new_c] += 1
+
+            if cur_holder[new_c] == target_holder[new_c]:
+                check_holder.remove(new_c)
+            else:
+                check_holder.add(new_c)
+            if len(check_holder) == 0:
+                res.append(i)
+            pre_c = s[i]
+        return res 

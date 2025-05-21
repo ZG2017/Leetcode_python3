@@ -1,0 +1,67 @@
+import re
+
+class Solution:
+    def merage_two_dict(self, dict1, dict2):
+        res = {name: 0 for name in self.names}
+        for i in dict1.keys():
+            res[i] = dict1[i] + dict2[i]
+        return res
+
+    # count without "(" and ")"
+    def count_func1(self, inputs):
+        holder = {name: 0 for name in self.names}
+        names = re.findall(r"[A-Z][a-z]?\d*", inputs)
+        for name in names:
+            sp = 0
+            ep = len(name)-1
+            while ep >= 0:
+                if name[sp:ep + 1] in self.names:
+                    break
+                ep -= 1
+            holder[name[sp:ep + 1]] += int(name[ep + 1:]) if ep + 1 != len(name) else 1
+        return holder
+
+    def split_and_count(self, inputs, current_times):
+        holder_list = []
+        sp = 0
+        ep = 0
+        while ep < len(inputs):
+            while ep < len(inputs) and inputs[ep] != "(":
+                ep += 1
+            if ep != 0:
+                holder_list.append(self.count_func1(inputs[sp:ep + 1]))
+            if ep < len(inputs):
+                sp = ep
+                ep += 1
+                pair_holder = ["("]
+                while pair_holder and ep < len(inputs):
+                    if inputs[ep] == ")":
+                        pair_holder.pop()
+                        ep += 1
+                    elif inputs[ep] == "(":
+                        pair_holder.append("(")
+                        ep += 1
+                    else:
+                        ep += 1
+                this_name = inputs[sp+1:ep-1]
+                sp = ep
+                while ep < len(inputs) and inputs[ep] in "0123456789":
+                    ep += 1
+                this_times = int(inputs[sp:ep]) if inputs[sp:ep] else 1
+                holder_list.append(self.split_and_count(this_name, this_times))
+        # count them together
+        total_holder = {name: 0 for name in self.names}
+        for holder in holder_list:
+            total_holder = self.merage_two_dict(total_holder, holder)
+        for key in total_holder.keys():
+            total_holder[key] = total_holder[key] * current_times
+        return total_holder
+
+    def countOfAtoms(self, formula):
+        self.names = re.findall(r"[A-Z][a-z]?", formula)
+        res_holder = self.split_and_count(formula, 1)
+        sorted_res = sorted(res_holder.items(), key=lambda x: x[0])
+        res = ""
+        for item in sorted_res:
+            res += item[0] + str(item[1]) if item[1] != 1 else item[0]
+        return res

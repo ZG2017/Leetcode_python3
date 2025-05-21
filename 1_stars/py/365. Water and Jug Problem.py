@@ -1,0 +1,48 @@
+# mine: (n**2,TLE)
+class Solution:
+    def canMeasureWater(self, x, y, z):
+        """
+        :type x: int
+        :type y: int
+        :type z: int
+        :rtype: bool
+        """
+        if z == x or z == y or x + y == z or z == 0:
+            return True
+        if x == 0 and y != z or x != z and y == 0:
+            return False
+        tmp_1 = []
+        tmp_2 = []
+        c1 = 1
+        c2 = 1
+        while c1 < y:
+            tmp_1.append(c1*x)
+            c1 += 1
+        while c2 < x:
+            tmp_2.append(c2*y)
+            c2 += 1
+        p1 = 0
+        p2 = 0
+        for i in tmp_1:
+            for j in tmp_2:
+                if abs(i-j) > i+j: continue
+                if abs(i-j) == z:return True
+        return False
+
+# updated:(find Greatest Common Divisor)
+class Solution(object):
+    def canMeasureWater(self, x, y, z):
+        """
+        :type x: int
+        :type y: int
+        :type z: int
+        :rtype: bool
+        """
+        if x > y: x, y = y, x
+        gcd = self.gcd(x, y)
+        if gcd == 0: return z == 0
+        return z % gcd == 0 and z <= x + y
+
+    def gcd(self, a, b):
+        if a == 0: return b
+        return self.gcd(b % a, a) 

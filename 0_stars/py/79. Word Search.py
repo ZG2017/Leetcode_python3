@@ -1,0 +1,84 @@
+# mine: (dfs)
+class Solution:
+    def exist(self, board, word):
+        """
+        :type board: List[List[str]]
+        :type word: str
+        :rtype: bool
+        """
+        start = []
+        m = len(board)
+        n = len(board[0])
+        for i in range(m):
+            for j in range(n):
+                if board[i][j] == word[0]:
+                    start.append([(i,j)])
+        def dfs(his,chars):
+            if chars == "":
+                return True
+            
+            x = his[-1][0]
+            y = his[-1][1]
+            x_l = x-1
+            x_h = x+1
+            y_l = y-1
+            y_h = y+1
+            
+            if x_l >= 0 and (x_l,y) not in his and board[x_l][y] == chars[0]:
+                if dfs(his+[(x_l,y)],chars[1:]):
+                    return True
+            if x_h < m and (x_h,y) not in his and board[x_h][y] == chars[0]:
+                if dfs(his+[(x_h,y)],chars[1:]):
+                    return True
+            if y_l >= 0 and (x,y_l) not in his and board[x][y_l] == chars[0]:
+                if dfs(his+[(x,y_l)],chars[1:]):
+                    return True
+            if y_h < n and (x,y_h) not in his and board[x][y_h] == chars[0]:
+                if dfs(his+[(x,y_h)],chars[1:]):
+                    return True
+            return False
+        for i in start:
+            flag = dfs(i,word[1:])
+            if flag:
+                return flag
+        return False
+
+# updated: (dfs with better structure)
+class Solution:
+    def dfs(self, board, i, j, word, k):
+        # if we already checked all letters of the given word, return True
+        if k == len(word):
+            return True
+        
+        if i < 0 or i >= len(board) or j < 0 or j >= len(board[i]):
+            return False
+        
+        if board[i][j] == word[k]:
+            # Prevent using the same element board[i][j] repeatedly, replace it with '#' 
+            temp = board[i][j]
+            board[i][j] = '#'
+            # Recursively check each letter in its current adjacent cells
+            res = self.dfs(board, i+1, j, word, k+1) or \
+                self.dfs(board, i-1, j, word, k+1) or \
+                self.dfs(board, i, j+1, word, k+1) or \
+                self.dfs(board, i, j-1, word, k+1)
+            board[i][j] = temp
+            return res
+        
+        return False
+   
+    def exist(self, board, word):
+        """
+        :type board: List[List[str]]
+        :type word: str
+        :rtype: bool
+        """
+        r, c = len(board), len(board[0])
+        
+        for i in range(r):
+            for j in range(c):  
+                if board[i][j] == word[0]:
+                    res = self.dfs(board, i, j, word, 0)
+                    if res:
+                        return True
+        return False 

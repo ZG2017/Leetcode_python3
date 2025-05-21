@@ -1,0 +1,19 @@
+mine:
+class Solution:
+    def countNumbersWithUniqueDigits(self, n):
+        """
+        :type n: int
+        :rtype: int
+        """
+        if n == 0:
+            return 1
+        dp = [9 for _ in range(n+1)]
+        dp[0] = 1
+        dp[1] = 10
+        for i in range(2,n+1):
+            c = 9
+            for _ in range(i-1):
+                dp[i] *= c
+                c -= 1
+            dp[i] += dp[i-1]
+        return dp[n]

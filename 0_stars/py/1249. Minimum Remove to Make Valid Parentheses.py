@@ -1,0 +1,17 @@
+# stack
+
+class Solution:
+    def minRemoveToMakeValid(self, s: str) -> str:
+        stack = []
+        drop = []
+        for idx, char in enumerate(s):
+            if char == '(': 
+                stack.append(idx)
+            elif char == ')':
+                if not stack:
+                    drop.append(idx)
+                else:
+                    stack.pop()
+        while stack:
+            drop.append(stack.pop())
+        return ''.join([i for idx, i in enumerate(s) if idx not in drop]) 

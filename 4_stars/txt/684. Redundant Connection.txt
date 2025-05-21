@@ -1,0 +1,21 @@
+class Solution:
+    def findRedundantConnection(self, edges: List[List[int]]) -> List[int]:
+        def union(x, y):
+            real_x = find(x)
+            real_y = find(y)
+            if real_x != real_y:
+                arr[real_x] = real_y
+
+        def find(x):
+            if arr[x] != x:
+                return find(arr[x])
+            else:
+                return x
+        arr = [i for i in range(max([max(i, j) for i, j in edges]))]
+        last_one = 0
+        for idx, (i,j) in enumerate(edges):
+            if find(i-1) != find(j-1):
+                union(i-1, j-1)
+            else:
+                last_one = idx
+        return edges[last_one]

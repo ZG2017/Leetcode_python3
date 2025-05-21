@@ -1,0 +1,66 @@
+recursive with cache
+
+class Solution:
+    @cache
+    def helper(self, s, e):
+        if s == e:
+            return 0, self.arr[s]
+        cur_sum = 2**32
+        for i in range(s, e):
+            left_sum, left_max = self.helper(s, i)
+            right_sum, right_max = self.helper(i+1, e)
+            tmp_sum = left_sum+right_sum+left_max*right_max
+            if tmp_sum < cur_sum:
+                cur_sum = tmp_sum
+        return cur_sum, max(left_max, right_max)
+
+    def mctFromLeafValues(self, arr: List[int]) -> int:
+        self.arr = arr
+        res, _ = self.helper(0, len(arr)-1)
+        return res
+
+
+recursive with cache -- > dp
+
+class Solution:
+    def mctFromLeafValues(self, arr: List[int]) -> int:
+        n = len(arr)
+        dp = [[(0, 0)]*n for i in range(n)]
+        for i in range(n):
+            dp[i][i] = 0, arr[i]
+
+        for gap in range(1, n):
+            for i in range(n-gap):
+                cur_sum = 2**32
+                cur_max = 0
+                for j in range(gap):
+                    tmp_sum = dp[i][i+j][0] + dp[i+j+1][i+gap][0] + dp[i][i+j][1] * dp[i+j+1][i+gap][1]
+                    if tmp_sum < cur_sum:
+                        cur_sum = tmp_sum
+                        cur_max = max(dp[i][i+j][1], dp[i+j+1][i+gap][1])
+                dp[i][i+gap] = cur_sum, cur_max
+        return dp[0][n-1][0]
+
+
+greedy
+refer: https://leetcode.com/problems/minimum-cost-tree-from-leaf-values/solutions/1510611/greedy-approach-97-faster-well-explained/
+
+class Solution:
+    def mctFromLeafValues(self, arr: List[int]) -> int:
+
+        arr = [float('inf')] + arr + [float('inf')]
+        n, res = len(arr), 0
+
+        while n>3:
+            mi = min(arr)
+            ind = arr.index(mi)
+
+            if arr[ind-1]<arr[ind+1]:
+                res+=arr[ind-1]*arr[ind]
+            else:
+                res+=arr[ind+1]*arr[ind]
+
+            arr.remove(mi)
+            n = len(arr)
+
+        return res

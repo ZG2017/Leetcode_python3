@@ -1,0 +1,15 @@
+class Solution:
+    def checkPerfectNumber(self, num: int) -> bool:
+        if num < 0:
+            return False
+        holder = set([])
+        for i in range(1, int(num**0.5)+1):
+            if num%i == 0:
+                holder.add(i)
+                holder.add(num//i)
+        if not holder:
+            return False
+        elif sum(holder) == 2*num:
+            return True
+        else:
+            return False

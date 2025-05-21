@@ -1,0 +1,49 @@
+# mine:(TLE)
+class Solution:
+    def containsNearbyAlmostDuplicate(self, nums, k, t):
+        """
+        :type nums: List[int]
+        :type k: int
+        :type t: int
+        :rtype: bool
+        """
+        if not nums:
+            return False
+        queue = []
+        for i in range(len(nums)):
+            if t == 0:
+                if nums[i] in queue:
+                    return True
+            else:
+                for j in queue:
+                    if abs(nums[i]-j)<=t:
+                        return True
+            queue.append(nums[i])
+            if len(queue)>k:
+                queue.remove(nums[i-k])
+        return False
+
+# updated: (JUST CHANGE TO SET!!!!!!!!)
+class Solution:
+    def containsNearbyAlmostDuplicate(self, nums, k, t):
+        """
+        :type nums: List[int]
+        :type k: int
+        :type t: int
+        :rtype: bool
+        """
+        if not nums:
+            return False
+        queue = set()
+        for i in range(len(nums)):
+            if t == 0:
+                if nums[i] in queue:
+                    return True
+            else:
+                for j in queue:
+                    if abs(nums[i]-j)<=t:
+                        return True
+            queue.add(nums[i])
+            if len(queue)>k:
+                queue.remove(nums[i-k])
+        return False 

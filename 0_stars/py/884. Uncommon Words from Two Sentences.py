@@ -1,0 +1,10 @@
+class Solution:
+    def uncommonFromSentences(self, s1: str, s2: str) -> List[str]:
+        from collections import Counter
+        c1 = Counter(s1.split(' '))
+        c2 = Counter(s2.split(' '))
+        s_set1 = set(c1.keys())
+        s_set2 = set(c2.keys())
+        only_set1 = set([k for k, v in c1.items() if v == 1])
+        only_set2 = set([k for k, v in c2.items() if v == 1])
+        return list((only_set1 - s_set2).union((only_set2 - s_set1))) 

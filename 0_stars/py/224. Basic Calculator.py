@@ -1,0 +1,102 @@
+# mine: (stack take too much time)
+class Solution:
+    def calculate(self, s):
+        """
+        :type s: str
+        :rtype: int
+        """
+        if not s:
+            return 0
+        s = s.replace(" ","")+"#"
+        stack = [0]
+        sign_stack = []
+        sign = True
+        index = 0
+        tmp = "0"
+        while index < len(s):
+            if s[index] not in "+-()#":
+                tmp += s[index]
+                index += 1
+            elif s[index] == "+":
+                if sign:
+                    stack[-1] += int(tmp)
+                else:
+                    stack[-1] -= int(tmp) 
+                tmp = ""
+                sign = True
+                index += 1
+            elif s[index] == "-":
+                if sign:
+                    stack[-1] += int(tmp)
+                else:
+                    stack[-1] -= int(tmp) 
+                tmp = ""
+                sign = False
+                index += 1
+            elif s[index] == "(":
+                stack.append(0)
+                index += 1
+                sign_stack.append(sign)
+                sign = True
+                tmp = "0"
+            elif s[index] == ")":
+                if sign:
+                    stack[-1] += int(tmp)
+                else:
+                    stack[-1] -= int(tmp)
+                tmp = "0"
+                sign_tmp = sign_stack.pop()
+                nums_tmp = stack.pop()
+                if sign_tmp:
+                    stack[-1] += nums_tmp
+                else:
+                    stack[-1] -= nums_tmp
+                index += 1
+                tmp = "0"
+            else:
+                if sign:
+                    stack[-1] += int(tmp)
+                else:
+                    stack[-1] -= int(tmp)
+                index += 1
+        return stack[-1]
+
+
+# updated: (faster)
+class Solution
+    def calculate(self, s)
+        
+        type s str
+        rtype int
+         
+        res = 0
+        num = 0
+        sign = 1
+        stk = []
+
+        for c in s
+            if c.isdigit()
+                num = 10  num + (ord(c) - ord('0'))
+            elif c == '+'
+                res += sign  num
+                num = 0
+                sign = 1
+            elif c == '-'
+                res += sign  num
+                num = 0
+                sign = -1
+            elif c == '('
+                stk.append(res)
+                stk.append(sign)
+                res = 0
+                sign = 1
+            elif c == ')'
+                res += sign  num
+                res = stk.pop()
+                res += stk.pop()
+                num = 0
+                sign = 1
+
+        if num
+            res += sign  num
+        return res

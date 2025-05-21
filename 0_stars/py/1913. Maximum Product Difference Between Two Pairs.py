@@ -1,0 +1,18 @@
+class Solution:
+    def maxProductDifference(self, nums: List[int]) -> int:
+        max_1, max_2 = 0, 0
+        min_1, min_2 = 1e4+1, 01e4+1
+        for i in nums:
+            if i < min_2:
+                if i < min_1:
+                    min_2 = min_1
+                    min_1 = i
+                else:
+                    min_2 = i
+            if i > max_2:
+                if i > max_1:
+                    max_2 = max_1
+                    max_1 = i
+                else:
+                    max_2 = i
+        return max_1*max_2 - min_1*min_2

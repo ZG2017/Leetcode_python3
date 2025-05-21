@@ -1,0 +1,18 @@
+# mine:
+class Solution:
+    def plusOne(self, digits):
+        """
+        :type digits: List[int]
+        :rtype: List[int]
+        """
+        digits.reverse()
+        digits[0] += 1
+        for i in range(0,len(digits)-1):
+            if digits[i] >= 10:
+                digits[i+1] += 1
+                digits[i] = 0
+        if digits[-1] >= 10:
+            digits[-1] = 0
+            digits.append(1)
+        digits.reverse()
+        return digits

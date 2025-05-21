@@ -1,0 +1,34 @@
+# mine:
+class Solution:
+    def wiggleMaxLength(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: int
+        """
+        if not nums:
+            return 0
+        elif len(nums) == 1:
+            return 1
+        elif len(nums) == 2:
+            if nums[0] != nums[1]:
+                return 2
+            else:
+                return 1
+        uping = 0
+        res = [nums[0]]
+        for i in nums:
+            if i == res[-1]:
+                continue
+            elif i > res[-1] and (uping == 0 or uping == -1):
+                res.append(i)
+                uping = 1
+            elif i < res[-1] and (uping == 0 or uping == 1):
+                res.append(i)
+                uping = -1
+            elif i < res[-1] and uping == -1:
+                res[-1] = i
+                uping = -1
+            elif i > res[-1] and uping == 1:
+                res[-1] = i
+                uping = 1
+        return len(res)

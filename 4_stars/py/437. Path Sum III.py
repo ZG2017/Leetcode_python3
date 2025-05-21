@@ -1,0 +1,34 @@
+# use a holder to save all the possible result through recursive search.
+
+# # Definition for a binary tree node.
+# # class TreeNode:
+# #     def __init__(self, val=0, left=None, right=None):
+# #         self.val = val
+# #         self.left = left
+# #         self.right = right
+class Solution:
+    def helper(self, cur_node):
+        if not cur_node:
+            return dict()
+        left_dict = self.helper(cur_node.left)
+        right_dict = self.helper(cur_node.right)
+        cur_dict = dict()
+        for k, v in left_dict.items():
+            if k + cur_node.val == self.targetSum:
+                self.res += v
+            cur_dict[k + cur_node.val] = cur_dict.get(k + cur_node.val, 0) + v
+        for k, v in right_dict.items():
+            if k + cur_node.val == self.targetSum:
+                self.res += v
+            cur_dict[k + cur_node.val] = cur_dict.get(k + cur_node.val, 0) + v
+        if cur_node.val == self.targetSum:
+            self.res += 1
+        cur_dict[cur_node.val] = cur_dict.get(cur_node.val, 0) + 1
+        return cur_dict
+
+    def pathSum(self, root: Optional[TreeNode], targetSum: int) -> int:
+        self.res = 0
+        self.targetSum = targetSum
+        tmp = self.helper(root)
+        print()
+        return self.res

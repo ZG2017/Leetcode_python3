@@ -1,0 +1,84 @@
+top2bottom BFS with recursive: TLE
+
+class Solution:
+    def directions(self, cur_x, cur_y, pre_dir):
+        res = []
+
+        if cur_x-1 >= 0 and (cur_x-1, cur_y) != pre_dir:
+            res.append((-1, 0))
+        if cur_y-1 >= 0 and (cur_x, cur_y-1) != pre_dir:
+            res.append((0, -1))
+        if cur_x+1 < self.n and (cur_x+1, cur_y) != pre_dir:
+            res.append((1, 0))
+        if cur_y+1 < self.m and (cur_x, cur_y+1) != pre_dir:
+            res.append((0, 1))
+        return res
+
+    def helper(self, cur_x, cur_y, pre_dir):
+        if self.mat[cur_x][cur_y] == 0:
+            self.holder[cur_x][cur_y] = 0
+            return 0
+        if self.holder[cur_x][cur_y] != -1:
+            return self.holder[cur_x][cur_y]
+        res = []
+        for delta_x, delta_y in self.directions(cur_x, cur_y, pre_dir):
+            cur_res = self.helper(cur_x + delta_x, cur_y + delta_y, (cur_x, cur_y))
+            if cur_res == 0:
+                self.holder[cur_x][cur_y] = 1
+                return 1
+            else:
+                res.append(cur_res)
+        self.holder[cur_x][cur_y] = min(res)+1
+        return min(res)+1
+
+    def updateMatrix(self, mat: List[List[int]]) -> List[List[int]]:
+        self.n, self.m = len(mat), len(mat[0])
+        self.mat = mat
+        self.holder = [[-1]*self.m for i in range(self.n)]
+        for i in range(self.n):
+            for j in range(self.m):
+                if self.mat[i][j] == 0:
+                    self.holder[i][j] = 0
+                elif self.holder[i][j] != -1:
+                    continue
+                else:
+                    self.helper(i, j, (-1, -1))
+        return self.holder
+
+
+update: bottom2top BFS with queue:
+
+refer: https://leetcode.com/problems/01-matrix/solutions/3920110/94-87-multi-source-bfs-queue/
+
+class Solution:
+    def directions(self, cur_x, cur_y):
+        res = []
+        if cur_x-1 >= 0:
+            res.append((-1, 0))
+        if cur_y-1 >= 0:
+            res.append((0, -1))
+        if cur_x+1 < self.m:
+            res.append((1, 0))
+        if cur_y+1 < self.n:
+            res.append((0, 1))
+        return res
+
+    def updateMatrix(self, mat: List[List[int]]) -> List[List[int]]:
+        from collections import deque
+        self.m = len(mat)
+        self.n = len(mat[0])
+        queue = deque()
+        for i in range(self.m):
+            for j in range(self.n):
+                if mat[i][j] == 0:
+                    queue.append((i, j))
+                else:
+                    mat[i][j] = 10**4+1
+
+        while queue:
+            cur_i, cur_j = queue.popleft()
+            for delta_i, delta_j in self.directions(cur_i, cur_j):
+                if mat[cur_i+delta_i][cur_j+delta_j] > mat[cur_i][cur_j] + 1:
+                    mat[cur_i+delta_i][cur_j+delta_j] = mat[cur_i][cur_j] + 1
+                    queue.append((cur_i+delta_i, cur_j+delta_j))
+        return mat

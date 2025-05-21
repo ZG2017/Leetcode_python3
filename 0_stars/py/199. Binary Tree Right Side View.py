@@ -1,0 +1,32 @@
+# mine: (inorder travel)
+# # Definition for a binary tree node.
+# # class TreeNode:
+# #     def __init__(self, x):
+# #         self.val = x
+# #         self.left = None
+# #         self.right = None
+
+class Solution:
+    def rightSideView(self, root):
+        """
+        :type root: TreeNode
+        :rtype: List[int]
+        """
+        dit = {}
+        res = []
+        def helper(root,level):
+            if not root:
+                return
+            helper(root.left,level+1)
+            if level not in res:
+                dit[level] = []
+            dit[level].append(root.val)
+            helper(root.right,level+1)
+        helper(root,0)
+        for i in dit:
+            res.append(dit[i][-1])
+        return res
+
+
+
+

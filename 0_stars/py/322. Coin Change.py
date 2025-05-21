@@ -1,0 +1,94 @@
+# mine:(DSF, TLE)
+class Solution:
+    def coinChange(self, coins, amount):
+        """
+        :type coins: List[int]
+        :type amount: int
+        :rtype: int
+        """
+        if amount == 0:
+            return 0
+        self.res = 0
+        coins.sort(reverse = True)
+        def helper(amount):
+            if amount == 0:
+                return True
+            for i in coins:
+                if i > amount:
+                    continue
+                self.res += 1
+                if helper(amount-i):
+                    return True
+                else:
+                    self.res -= 1
+            return False
+        helper(amount)
+        return self.res if self.res != 0 else -1
+
+
+# mine:(dp, TLE)
+class Solution:
+    def coinChange(self, coins, amount):
+        """
+        :type coins: List[int]
+        :type amount: int
+        :rtype: int
+        """
+        if amount == 0:
+            return 0
+        dp = [0] + [float("inf")] * amount
+        for i in range(1,amount+1):
+            for num in coins:
+                tmp = i - num
+                if tmp < 0:
+                    continue
+                else:
+                    dp[i] = min(dp[tmp]+1,dp[i])
+        return dp[amount] if dp[amount] != float("inf") else -1
+
+
+# updated:(dp improved)
+class Solution(object):
+    def coinChange(self, coins, amount):
+        """
+        :type coins: List[int]
+        :type amount: int
+        :rtype: int
+        """
+        dp = [0] + [-1] * amount
+        for x in range(amount):
+            if dp[x] < 0:
+                continue
+            for c in coins:
+                if x + c > amount:
+                    continue
+                if dp[x + c] < 0 or dp[x + c] > dp[x] + 1:
+                    dp[x + c] = dp[x] + 1
+        return dp[amount]
+
+
+# updated:(BSF)
+class Solution(object):
+    def coinChange(self, coins, amount):
+        """
+        :type coins: List[int]
+        :type amount: int
+        :rtype: int
+        """
+        steps = collections.defaultdict(int)
+        queue = collections.deque([0])
+        steps[0] = 0
+        while queue:
+            front = queue.popleft()
+            level = steps[front]
+            if front == amount:
+                return level
+            for c in coins:
+                if front + c > amount:
+                    continue
+                if front + c not in steps:
+                    queue += front + c,
+                    steps[front + c] = level + 1
+        return -1
+
+

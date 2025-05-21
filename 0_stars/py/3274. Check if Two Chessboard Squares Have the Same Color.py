@@ -1,0 +1,25 @@
+class Solution:
+    def checkTwoChessboards(self, coordinate1: str, coordinate2: str) -> bool:
+        if (ord(coordinate1[0])-ord('a'))%2 == 0:
+            if int(coordinate1[1])%2 == 0:
+                a = True
+            else:
+                a = False
+        else:
+            if int(coordinate1[1])%2 == 0:
+                a = False
+            else:
+                a = True
+
+        if (ord(coordinate2[0])-ord('a'))%2 == 0:
+            if int(coordinate2[1])%2 == 0:
+                b = True
+            else:
+                b = False
+        else:
+            if int(coordinate2[1])%2 == 0:
+                b = False
+            else:
+                b = True
+
+        return a == b 

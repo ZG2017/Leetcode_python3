@@ -1,0 +1,51 @@
+# graph(self.link_holder in the code) and dfs
+
+class Solution:
+    def dfs(self, cur_node, tail_node, path_holder, visited):
+        if cur_node == tail_node:
+            res = 1
+            path_holder = path_holder+[tail_node]
+            for i in range(len(path_holder)-1):
+                res *= self.holder[(path_holder[i], path_holder[i+1])]
+            self.holder[(path_holder[0], path_holder[-1])] = res
+            self.holder[(path_holder[-1], path_holder[0])] = 1/res
+            if path_holder[0] not in self.link_holder:
+                self.link_holder[path_holder[0]] = set([])
+            self.link_holder[path_holder[0]].add(path_holder[-1])
+            if path_holder[-1] not in self.link_holder:
+                self.link_holder[path_holder[-1]] = set([])
+            self.link_holder[path_holder[-1]].add(path_holder[0])
+            return True
+        for node in self.link_holder[cur_node]:
+            if node not in visited and self.dfs(node, tail_node, path_holder+[cur_node], visited+[node]):
+                return True
+        return False
+
+    def calcEquation(self, equations: List[List[str]], values: List[float], queries: List[List[str]]) -> List[float]:
+        self.holder = dict()
+        self.link_holder = dict()
+        self.vocab = set([])
+        for (a,b), j in zip(equations, values):
+            if a not in self.vocab:
+                self.vocab.add(a)
+            if b not in self.vocab:
+                self.vocab.add(b)
+            self.holder[(a, b)] = j
+            self.holder[(b, a)] = 1/j
+            if a not in self.link_holder:
+                self.link_holder[a] = set([])
+            self.link_holder[a].add(b)
+            if b not in self.link_holder:
+                self.link_holder[b] = set([])
+            self.link_holder[b].add(a)
+
+        ans = []
+        for j, t in queries:
+            if j not in self.vocab or t not in self.vocab:
+                ans.append(-1)
+                continue
+            if self.dfs(j, t, [], []):
+                ans.append(self.holder[(j, t)])
+            else:
+                ans.append(-1)
+        return ans 

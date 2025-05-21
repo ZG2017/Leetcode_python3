@@ -1,0 +1,24 @@
+stack
+
+class Solution:
+    def nextGreaterElements(self, nums: List[int]) -> List[int]:
+        origianl_len = len(nums)
+        nums = nums + nums
+        holder = dict()
+        stack = []
+        for i, n in enumerate(nums):
+            if i in holder:
+                continue
+            if not stack:
+                stack.append((i%origianl_len,n))
+                continue
+            while stack and n > stack[-1][1]:
+                cur_i, cur_n = stack.pop()
+                holder[cur_i] = n
+            stack.append((i,n))
+        for i, n in stack:
+            holder[i] = -1
+        res = []
+        for i in range(origianl_len):
+            res.append(holder[i])
+        return res

@@ -1,0 +1,12 @@
+class Solution:
+    def removeInterval(self, intervals: List[List[int]], toBeRemoved: List[int]) -> List[List[int]]:
+        res = []
+        for i, j in intervals:
+            if i>toBeRemoved[1] or j<toBeRemoved[0]:
+                res.append([i,j])
+            else:
+                if i < toBeRemoved[0] < j:
+                    res.append([i, toBeRemoved[0]])
+                if i < toBeRemoved[1] < j:
+                    res.append([toBeRemoved[1], j])
+        return res

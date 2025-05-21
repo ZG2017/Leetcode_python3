@@ -1,0 +1,29 @@
+# queue
+
+# deque from collections has O(1) for both pop(0) and pop(-1) while original list has O(0) for pop(0)
+
+class Solution:
+    def longestOnes(self, nums: List[int], k: int) -> int:
+        from collections import deque
+        res = 0
+        cur_k = 0
+        q = deque([])
+        for num in nums:
+            if num == 1:
+                q.append(num)
+                if len(q) > res:
+                    res = len(q)
+            else:
+                if cur_k < k:
+                    q.append(num)
+                    if len(q) > res:
+                        res = len(q)
+                    cur_k += 1
+                else:
+                    while q:
+                        pop_num = q.popleft()
+                        if pop_num == 0:
+                            break
+                    if k != 0:
+                        q.append(num)
+        return res

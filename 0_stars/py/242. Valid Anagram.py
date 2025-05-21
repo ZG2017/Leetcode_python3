@@ -1,0 +1,60 @@
+# mine: (slower)
+class Solution:
+    def isAnagram(self, s, t):
+        """
+        :type s: str
+        :type t: str
+        :rtype: bool
+        """
+        if not s and not t:
+            return True
+        if set(s) != set(t) or len(s) != len(t):
+            return False
+        else:
+            dit = {}
+            for i in s:
+                if i not in dit:
+                    dit[i] = 0
+                dit[i] += 1
+            for i in t:
+                dit[i] -= 1
+                if dit[i] < 0:
+                    return False
+            return True
+
+
+
+# updated:
+class Solution:
+    def isAnagram(self, s, t):
+        """
+        :type s: str
+        :type t: str
+        :rtype: bool
+        """
+        if len(s) != len(t):
+            return False
+        
+        ref = 'abcdefghijklmnopqrstuvwxyz'
+        for l in ref:
+            if s.count(l) != t.count(l):
+                return False
+        
+        return True
+
+
+# updated:
+class Solution:
+    def isAnagram(self, s, t):
+        """
+        :type s: str
+        :type t: str
+        :rtype: bool
+        """
+        # a = sorted(s, key=lambda x: ord(x))
+        # b = sorted(t, key=lambda x: ord(x))
+        # if a == b:
+        #     return True
+        # else:
+        #     return False
+        return set(s) == set(t) and all(s.count(i) == t.count(i) for i in set(s))

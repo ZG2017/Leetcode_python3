@@ -1,0 +1,45 @@
+two pointers:
+
+class Solution:
+    def validPalindrome(self, s: str) -> bool:
+        if len(s) <= 1:
+            return False
+        h, t = 0, len(s)-1
+        tmp_h, tmp_t = -1, -1
+        repeated = False
+        c = 0
+        while h <= t:
+            if s[h] == s[t]:
+                h += 1
+                t -= 1
+                continue
+            if s[h] != s[t]:
+                if c == 0:
+                    c += 1
+                    tmp_h, tmp_t = h, t
+                    h += 1
+                    continue
+                else:
+                    if repeated:
+                        return False
+                    else:
+                        repeated = True
+                        h, t = tmp_h, tmp_t
+                        t -= 1
+        return True
+
+
+updated, two pointers:
+
+class Solution:
+    def validPalindrome(self, s: str) -> bool:
+            p1=0
+            p2=len(s)-1
+            while p1<=p2:
+                if s[p1]!=s[p2]:
+                    string1=s[:p1]+s[p1+1:]
+                    string2=s[:p2]+s[p2+1:]
+                    return string1==string1[::-1] or string2==string2[::-1]
+                p1+=1
+                p2-=1
+            return True

@@ -1,0 +1,37 @@
+mine:
+class Solution:
+    def hIndex(self, citations):
+        """
+        :type citations: List[int]
+        :rtype: int
+        """
+        if not citations:
+            return 0
+        res = 0
+        citations.sort()
+        citations = [-1] + citations
+        tmp = len(citations)-1
+        index = len(citations)-1
+        while index >= 1:
+            if tmp-index+1 <= citations[index] and citations[index-1] <= tmp-index+1:
+                res = tmp-index+1
+                break
+            index -= 1
+        return res
+
+
+
+updated:
+class Solution:
+    def hIndex(self, citations):
+        """
+        :type citations: List[int]
+        :rtype: int
+        """
+        citations=sorted(citations,reverse=True)
+        i=0
+        while i<len(citations):
+            if citations[i]<=i:
+                break
+            i+=1
+        return i

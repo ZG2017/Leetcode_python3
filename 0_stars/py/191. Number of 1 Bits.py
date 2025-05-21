@@ -1,0 +1,23 @@
+# mine:
+# import math
+class Solution(object):
+    def hammingWeight(self, n):
+        """
+        :type n: int
+        :rtype: int
+        """
+        counter = 0
+        while n:
+            n -= 2**int(math.log(n,2))
+            counter += 1
+        return counter
+
+
+# updated:
+class Solution(object):
+    def hammingWeight(self, n):
+        """
+        :type n: int
+        :rtype: int
+        """
+        return bin(n).count('1')

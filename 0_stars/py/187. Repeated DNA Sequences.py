@@ -1,0 +1,36 @@
+# mine:
+class Solution:
+    def findRepeatedDnaSequences(self, s):
+        """
+        :type s: str
+        :rtype: List[str]
+        """
+        dit={}
+        res=[]
+        for i in range(len(s)-9):
+            if s[i:i+10] not in dit:
+                dit[s[i:i+10]]=1
+            else:
+                dit[s[i:i+10]]+=1
+        for i in dit:
+            if dit[i] != 1:
+                res.append(i)
+        return res
+
+
+# updated: (two hashtable more space but faster)
+class Solution:
+    def findRepeatedDnaSequences(self, s):
+        """
+        :type s: str
+        :rtype: List[str]
+        """
+        s1, s2 = set(), set()
+        n = len(s)
+        for i in range(n-10+1):
+            key = s[i:i+10]
+            if key not in s1:
+                s1.add(key)
+            else:
+                s2.add(key)
+        return [key for key in s2]

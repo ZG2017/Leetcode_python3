@@ -1,0 +1,48 @@
+mine:(too much time)
+# Definition for a point.
+# class Point:
+#     def __init__(self, a=0, b=0):
+#         self.x = a
+#         self.y = b
+from decimal import Decimal
+class Solution:
+    def maxPoints(self, points):
+        """
+        :type points: List[Point]
+        :rtype: int
+        """
+        if len(points) == 0:
+            return 0
+        elif len(points) == 1:
+            return 1
+        dit = {}
+        max_len = 2
+        for i in range(len(points)):
+            for j in range(i+1,len(points)):
+                if points[i].x != points[j].x:
+                    a = Decimal((points[i].y-points[j].y))/Decimal((points[i].x-points[j].x))
+                    b = Decimal((points[i].x*points[j].y-points[j].x*points[i].y))/Decimal((points[i].x-points[j].x))
+                else:
+                    a = float("inf")
+                    b = points[i].x
+                if (a,b) in dit:
+                    if points[i] not in dit[(a,b)]:
+                        dit[(a,b)].append(points[i])
+                        dit[(a,b)][0] += 1
+                    if points[j] not in dit[(a,b)]:
+                        dit[(a,b)].append(points[j])
+                        dit[(a,b)][0] += 1
+                    if dit[(a,b)][0] > max_len:
+                        max_len = dit[(a,b)][0]
+                else:
+                    dit[(a,b)] = [2]
+                    dit[(a,b)].append(points[i])
+                    dit[(a,b)].append(points[j])
+        return max_len
+        """
+        for i in dit:
+            if len(dit[i]) > max_len:
+                max_len = len(dit[i])
+        return max_len
+        """
+

@@ -1,0 +1,82 @@
+# updated:
+class Solution:
+    def calculate(self, s):
+        """
+        :type s: str
+        :rtype: int
+        """
+        exp = s.replace(" ","")
+        precedeTable = {'++' : '>', '+-' : '>', '+*' : '<', '+/' : '<', '+#' : '>',\
+                        '-+' : '>', '--' : '>', '-*' : '<', '-/' : '<', '-#' : '>',\
+                        '*+' : '>', '*-' : '>', '**' : '>', '*/' : '>', '*#' : '>',\
+                        '/+' : '>', '/-' : '>', '/*' : '>', '//' : '>', '/#' : '>',\
+                        '#+' : '<', '#-' : '<', '#*' : '<', '#/' : '<', '##' : '='}
+        stackOp = ['#']
+        stackNum = []
+        exp += '#'
+        i = 0
+        while i < len(exp):
+            e = exp[i]
+            if e.isdigit():
+                if exp[i-1].isdigit():
+                    stackNum[-1] = stackNum[-1]*10+int(e)
+                else:
+                    stackNum.append(int(e))
+                i += 1
+            else:
+                if precedeTable[stackOp[-1] + e] == '<':
+                    stackOp.append(e)
+                    i += 1
+                elif precedeTable[stackOp[-1] + e] == '>':
+                    b = stackNum.pop()
+                    a = stackNum.pop()
+                    op = stackOp.pop()
+                    if op == '+':
+                        stackNum.append(a + b)
+                    elif op == '-':
+                        stackNum.append(a - b)
+                    elif op == '*':
+                        stackNum.append(a * b)
+                    else:
+                        stackNum.append(int(a / b))
+                else:
+                    stackOp.pop()
+                    i += 1
+        return stackNum[0]
+
+
+
+# updated:(even faster)
+class Solution:
+    def calculate(self, s):
+        """
+        :type s: str
+        :rtype: int
+        """
+        s += '+'
+        r, last, c = [0], ['+'], 0
+        for i in s:
+            if i == ' ':
+                pass
+            elif i in '+-':
+                if last[0] == '+':
+                    r[0] += c
+                elif last[0] == '-':
+                    r[0] -= c
+                elif last[0] in '*/':
+                    t, l = r.pop(0), last.pop(0)
+                    t = t * c if l == '*' else t // c
+                    r[0] = r[0] + t if last[0] == '+' else r[0] - t
+                last[0], c = i, 0
+            elif i in '*/':
+                if last[0] in '+-':
+                    r.insert(0, c)
+                    last.insert(0, i)
+                elif last[0] == '*':
+                    r[0] *= c
+                elif last[0] == '/':
+                    r[0] //= c
+                last[0], c = i, 0
+            else:
+                c = c * 10 + int(i)
+        return r[0]

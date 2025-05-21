@@ -1,0 +1,43 @@
+# hashmap + permutation
+
+class Solution:
+    def compute(self, p1, p2):
+        return (p1[0]-p2[0])**2 + (p1[1]-p2[1])**2
+
+    def numberOfBoomerangs(self, points: List[List[int]]) -> int:
+        if len(points) <= 2:
+            return 0
+
+        holder = dict()
+        res = 0
+        for i in range(len(points)-1):
+            cur_p1 = tuple(points[i])
+            if cur_p1 not in holder:
+                holder[cur_p1] = dict()
+            for j in range(i+1, len(points)):
+                cur_p2 = tuple(points[j])
+                if cur_p2 not in holder:
+                    holder[cur_p2] = dict()
+                dis = self.compute(points[i], points[j])
+                if dis not in holder[cur_p1]:
+                    holder[cur_p1][dis] = 0
+                if dis not in holder[cur_p2]:
+                    holder[cur_p2][dis] = 0
+                holder[cur_p1][dis] += 1
+                holder[cur_p2][dis] += 1
+            res += sum([i*(i-1) for i in holder[cur_p1].values()])
+        res += sum([i*(i-1) for i in holder[cur_p2].values()])
+        return res
+
+# better implementation:
+# refer: https://leetcode.com/problems/number-of-boomerangs/solutions/3361058/solution/
+
+class Solution:
+    def numberOfBoomerangs(self, points: List[List[int]]) -> int:
+        ans=0
+        for x1, y1 in points:
+            dist=[(x1-x2)*(x1-x2)+(y1-y2)*(y1-y2)   for x2, y2 in points ]
+            count=collections.Counter(dist)
+            for c in count.values():
+                ans+=c*(c-1)
+        return ans 

@@ -1,0 +1,56 @@
+# mine:
+# import numpy as np
+class Solution:
+    def maxArea(self, height):
+        """
+        :type height: List[int]
+        :rtype: int
+        """
+        maxa = 0
+        value = []
+        index = []
+        tmp_distance = []
+        index_pointer = 0
+        tmp_max = 0
+        
+        ditc = list(range(len(height)))
+        ditc = dict(zip(ditc,height))
+        tmp = sorted(ditc.items(),key = lambda x:x[1])
+        for i in tmp:
+            value.append(i[1])
+            index.append(i[0])
+        index2 = np.array([index.copy()])
+        for i in range(len(value)):
+            index_pointer = index[i]
+            tmp_distance = abs(index2-index_pointer)
+            tmp_max = np.amax(tmp_distance)* value[i]
+            if int(tmp_max) > maxa:
+                maxa = tmp_max
+            index2 = np.delete(index2,0,axis = 1)
+        return int(maxa)
+
+
+
+# updated: Approach 2: Two Pointer Approach
+class Solution:
+    def maxArea(self, height):
+        left, right = 0, len(height) - 1
+        area = 0
+        
+        while left < right:
+            if height[left] <= height[right]:
+                h = height[left]
+                tmp = (right - left) * h
+                left += 1
+            else:
+                h = height[right]
+                tmp = (right - left) * h
+                right -= 1
+            if area < tmp:
+                area = tmp
+            
+        return area
+        """
+        :type height: List[int]
+        :rtype: int
+        """

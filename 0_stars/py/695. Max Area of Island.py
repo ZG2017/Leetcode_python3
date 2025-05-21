@@ -1,0 +1,29 @@
+# backtracking
+
+class Solution:
+    def maxAreaOfIsland(self, grid: List[List[int]]) -> int:
+        self.x = len(grid)
+        self.y = len(grid[0])
+        self.holder = set()
+        self.grid = grid
+        max_area = 0
+        
+        for i in range(self.x):
+            for j in range(self.y):
+                if grid[i][j] == 0 or (i, j) in self.holder:
+                    continue
+                cur_area = self.backtracking(i, j)
+                if cur_area > max_area: max_area = cur_area
+        return max_area
+                
+    def backtracking(self, i, j):
+        if i>=self.x or i<0 or j>=self.y or j<0 or self.grid[i][j] == 0 or (i, j) in self.holder:
+            return 0
+        self.holder.add((i,j))
+        area = 1
+        area += self.backtracking(i-1, j)
+        area += self.backtracking(i+1, j)
+        area += self.backtracking(i, j-1)
+        area += self.backtracking(i, j+1)
+        return area
+        

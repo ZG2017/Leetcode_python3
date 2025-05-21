@@ -1,0 +1,42 @@
+# prefix-sum
+
+class Solution:
+    def platesBetweenCandles(self, s: str, queries: List[List[int]]) -> List[int]:
+        n = len(s)
+        holder_candle = [0]*n
+        holder_star_l = [0]*n
+        holder_star_r = [0]*n
+        n_stars = 0
+        for i in range(0, n):
+            if s[i] == "|":
+                holder_candle[i] = n_stars
+            else:
+                n_stars += 1
+        holder_candle[i] = n_stars
+
+        cur_candle_i = 0
+        for i in range(0, n):
+            if s[i] == '*':
+                holder_star_l[i] = cur_candle_i
+            else:
+                cur_candle_i = i
+        cur_candle_i = n-1
+        for i in range(n-1, -1, -1):
+            if s[i] == '*':
+                holder_star_r[i] = cur_candle_i
+            else:
+                cur_candle_i = i
+
+        res = []
+        for query in queries:
+            if s[query[0]] == '*':
+                left_c = holder_candle[holder_star_r[query[0]]]
+            else:
+                left_c = holder_candle[query[0]]
+            if s[query[1]] == '*':
+                right_c = holder_candle[holder_star_l[query[1]]]
+            else:
+                right_c = holder_candle[query[1]]
+            cur_res = max(right_c - left_c, 0)
+            res.append(cur_res)
+        return res

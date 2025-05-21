@@ -1,0 +1,8 @@
+class Solution:
+    def countPoints(self, points: List[List[int]], queries: List[List[int]]) -> List[int]:
+        n_points = [0] * len(queries)
+        for idx, i in enumerate(queries):
+            for j in points:
+                if sqrt((i[0]-j[0])**2+(i[1]-j[1])**2) <= i[2]:
+                    n_points[idx] += 1
+        return n_points

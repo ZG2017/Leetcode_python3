@@ -1,0 +1,20 @@
+class Solution:
+    def subsetsWithDup(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: List[List[int]]
+        """
+        res = [[]]
+        nums.sort()
+        index = 0
+        added = []
+        for i in nums:
+            if i not in added:
+                index = len(res)
+                res += [[i]+j for j in res]
+                added += [i]
+            else:
+                tmp = len(res)
+                res += [[i]+j for j in res[index:]]
+                index = tmp
+        return res

@@ -1,0 +1,106 @@
+# mine:(recursively, slow)
+class WordDictionary:
+
+    def __init__(self):
+        """
+        Initialize your data structure here.
+        """
+        self.root = {}
+
+    def addWord(self, word):
+        """
+        Adds a word into the data structure.
+        :type word: str
+        :rtype: void
+        """
+        self.add_helper(word,self.root)
+            
+    def add_helper(self,word,root):
+        if not word:
+            root["#"] = 1
+            return
+        if word[0] not in root:
+            root[word[0]] = {}
+        self.add_helper(word[1:],root[word[0]])
+        
+
+    def search(self, word):
+        """
+        Returns if the word is in the data structure. A word could contain the dot character '.' to represent any one letter.
+        :type word: str
+        :rtype: bool
+        """
+        return self.search_helper(word,self.root)
+        
+    def search_helper(self,word,root):
+        if not word:
+            if "#" in root:
+                return True
+            else:
+                return False
+        if word[0] == ".":
+            for i in root:
+                if i == "#":
+                    continue
+                if self.search_helper(word[1:],root[i]):
+                    return True
+            return False
+        elif word[0] in root:
+            if self.search_helper(word[1:],root[word[0]]):
+                return True
+            else:
+                return False
+        else:
+            return False
+
+
+# # Your WordDictionary object will be instantiated and called as such:
+# # obj = WordDictionary()
+# # obj.addWord(word)
+# # param_2 = obj.search(word)
+
+
+
+
+# updated:(faster)
+class WordDictionary:
+
+    def __init__(self):
+        """
+        Initialize your data structure here.
+        """
+        self.word_dict = collections.defaultdict(list)
+
+    def addWord(self, word):
+        """
+        Adds a word into the data structure.
+        :type word: str
+        :rtype: void
+        """
+        if word:
+            self.word_dict[len(word)].append(word)
+
+    def search(self, word):
+        """
+        Returns if the word is in the data structure. A word could contain the dot character '.' to represent any one letter.
+        :type word: str
+        :rtype: bool
+        """
+        if not word:
+            return False
+        if '.' not in word:
+            return word in self.word_dict[len(word)]
+        for v in self.word_dict[len(word)]:
+            for i, ch in enumerate(word):
+                if ch != v[i] and ch != '.':
+                    break
+            else:
+                return True
+        return False
+        
+
+
+# # Your WordDictionary object will be instantiated and called as such:
+# # obj = WordDictionary()
+# # obj.addWord(word)
+# # param_2 = obj.search(word)

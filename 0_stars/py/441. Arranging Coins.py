@@ -1,0 +1,30 @@
+class Solution:
+    def arrangeCoins(self, n: int) -> int:
+        if n == 1:
+            return 1
+        cur_sum = 0
+        c = 1
+        while n > cur_sum:
+            cur_sum += c
+            c += 1
+        if n == cur_sum:
+            return c - 1
+        else:
+            return c - 2
+
+# update: binary search
+class Solution:
+    def arrangeCoins(self, n: int) -> int:
+        if n == 1:
+            return 1
+        l, r = 0, n
+        while l < r-1:
+            mid = (l+r)//2
+            cur_res = (mid+1)*mid//2
+            if cur_res == n:
+                return mid
+            elif cur_res > n:
+                r = mid
+            else:
+                l = mid
+        return l 

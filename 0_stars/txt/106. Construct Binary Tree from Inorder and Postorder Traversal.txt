@@ -1,0 +1,22 @@
+递归 用后序遍历去分割中序遍历
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+
+class Solution:
+    def buildTree(self, inorder: List[int], postorder: List[int]) -> TreeNode:
+        if not inorder:
+            return None
+        cur_val = postorder.pop()
+        idx = inorder.index(cur_val)
+        right_list = inorder[idx+1:]
+        left_list = inorder[:idx]
+        right = self.buildTree(right_list, postorder)
+        left = self.buildTree(left_list, postorder)
+        cur_node = TreeNode(cur_val)
+        cur_node.left = left
+        cur_node.right = right
+        return cur_node

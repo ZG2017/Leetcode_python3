@@ -1,0 +1,19 @@
+# mine:
+class Solution(object):
+    def intersect(self, nums1, nums2):
+        """
+        :type nums1: List[int]
+        :type nums2: List[int]
+        :rtype: List[int]
+        """
+        dit_1 = {}
+        andl = []
+        for i in nums1:
+            if i not in dit_1:
+                dit_1[i] = 0
+            dit_1[i] += 1
+        for i in nums2:
+            if i in dit_1 and dit_1[i] != 0:
+                andl.append(i)
+                dit_1[i] -= 1
+        return andl

@@ -1,0 +1,40 @@
+# mine:(TLE) (dfs)
+class Solution:
+    def findWords(self, board, words):
+        """
+        :type board: List[List[str]]
+        :type words: List[str]
+        :rtype: List[str]
+        """
+        def helper(p1,p2):
+            if p1 == (-1,-1):
+                return True
+            if (p1[0] == p2[0] and abs(p1[1]-p2[1]) == 1) or (p1[1] == p2[1] and abs(p1[0]-p2[0]) == 1):
+                return True
+            else: 
+                return False
+        def dfs(word,pos,tmp):
+            if not word:
+                return True
+            if word[0] in dit:
+                for i in dit[word[0]]:
+                    if i in tmp:
+                        continue
+                    if helper(pos,i) and dfs(word[1:],i,tmp+[i]):
+                        return True
+                return False                        
+            else:
+                return False
+        res = []
+        n = len(board)
+        m = len(board[0])
+        dit = {}
+        for i in range(n):
+            for j in range(m):
+                if board[i][j] not in dit:
+                    dit[board[i][j]] = []
+                dit[board[i][j]].append((i,j))
+        for i in words:
+            if dfs(i,(-1,-1),[(-1,-1)]):
+                res.append(i)
+        return list(set(res))

@@ -1,0 +1,99 @@
+# mine:(TLE)
+class Solution:
+    def solve(self, board):
+        """
+        :type board: List[List[str]]
+        :rtype: void Do not return anything, modify board in-place instead.
+        """
+        if not board:
+            return
+        total_point = []
+        need_to_flip = []
+        self.tmp = []
+        m = len(board)
+        n = len(board[0])      
+        def helper(point):
+            if point[0]<0 or point[0]>m-1 or point[1]<0 or point[1]>n-1 or board[point[0]][point[1]] == "X":
+                return []
+            self.tmp += [point]
+            if (point[0]-1,point[1]) not in self.tmp:
+                helper((point[0]-1,point[1]))
+            if (point[0]+1,point[1]) not in self.tmp:
+                helper((point[0]+1,point[1]))
+            if (point[0],point[1]-1) not in self.tmp:
+                helper((point[0],point[1]-1))
+            if (point[0],point[1]+1) not in self.tmp:
+                helper((point[0],point[1]+1))
+        
+        def check(block):
+            flag = False
+            for point in block:
+                if point[0]>0 and point[0]<m-1 and point[1]>0 and point[1]<n-1:
+                    continue
+                else:
+                    flag = True
+                    break
+            return flag
+        
+        for i in range(m):
+            for j in range(n):
+                if board[i][j] == "X" or ((i,j) in total_point):
+                    continue
+                else:
+                    self.tmp = []
+                    helper((i,j))
+                    total_point += self.tmp
+                    if not check(self.tmp):
+                        need_to_flip += self.tmp
+        for i in need_to_flip:
+            board[i[0]][i[1]] = "X"
+
+
+
+# updated: (bascially the same but to find the point dont need to flip, which is faster)
+class Solution:
+    def solve(self, board):
+        """
+        :type board: List[List[str]]
+        :rtype: void Do not return anything, modify board in-place instead.
+        """
+        if not board:
+            return
+        def helper(point):
+            if point[0]<0 or point[0]>m-1 or point[1]<0 or point[1]>n-1 or board[point[0]][point[1]] == "X":
+                return []
+            total_point.append(point) 
+            if (point[0]-1,point[1]) not in total_point:
+                helper((point[0]-1,point[1]))
+            if (point[0]+1,point[1]) not in total_point:
+                helper((point[0]+1,point[1]))
+            if (point[0],point[1]-1) not in total_point:
+                helper((point[0],point[1]-1))
+            if (point[0],point[1]+1) not in total_point:
+                helper((point[0],point[1]+1))  
+        stack = []
+        total_point = []
+        m = len(board)
+        n = len(board[0]) 
+        for i in range(m):
+            if board[i][0] == "O":
+                stack.append((i,0))
+            if board[i][n-1] == "O":
+                stack.append((i,n-1))
+        for i in range(n):
+            if board[0][i] == "O":
+                stack.append((0,i))
+            if board[m-1][i] == "O":
+                stack.append((m-1,i))
+        for i in stack:
+            if i in total_point:
+                continue
+            else:
+                helper(i)
+        for i in range(m):
+            for j in range(n):
+                if board[i][j] == "X" or (i,j) in total_point:
+                    continue
+                else:
+                    board[i][j] = "X"
+

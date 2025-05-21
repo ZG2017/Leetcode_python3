@@ -1,0 +1,61 @@
+backtracking: exceed time limitted 12/41
+
+class Solution:
+    def backtracking(self, cur_nums, c_holder, overall_k):
+        if overall_k >= self.k and len(cur_nums) >= 2:
+            self.res.add(''.join([str(i) for i in cur_nums]))
+        else:
+            return
+        cur_l_c = c_holder[cur_nums[0]]
+        cur_r_c = c_holder[cur_nums[-1]]
+        if cur_l_c > 0:
+            c_holder[cur_nums[0]] -= 1
+            self.backtracking(cur_nums[1:], c_holder, overall_k - (cur_l_c - 1))
+            c_holder[cur_nums[0]] += 1
+        if cur_r_c > 0:
+            c_holder[cur_nums[-1]] -= 1
+            self.backtracking(cur_nums[:-1], c_holder, overall_k - (cur_r_c - 1))
+            c_holder[cur_nums[-1]] += 1
+    def countGood(self, nums: List[int], k: int) -> int:
+        from collections import Counter
+        c_holder = Counter(nums)
+        overall_k = sum([i*(i-1)//2 for i in c_holder.values()])
+        self.res = set([])
+        self.k = k
+        self.backtracking(nums, c_holder, overall_k)    
+        return len(self.res)
+
+
+2 pointer
+
+class Solution:
+    def countGood(self, nums, k):
+        from collections import Counter
+        res = 0
+        l, r = 0, 1
+        c_holder = Counter(nums[l:r+1])
+        cur_c = sum([i*(i-1)//2 for i in c_holder.values()])
+        while l < r and r < len(nums):
+            if cur_c < k:
+                r += 1
+                if r >= len(nums):
+                    break
+                if nums[r] not in c_holder:
+                    c_holder[nums[r]] = 1
+                else:
+                    cur_c += c_holder[nums[r]]
+                    c_holder[nums[r]] += 1
+            else:
+                res += len(nums) - r
+
+                cur_c -= c_holder[nums[l]]-1
+                c_holder[nums[l]] -= 1
+                l += 1
+                if r == l:
+                    r += 1
+                    if r >= len(nums):
+                        break
+                    cur_c += c_holder[nums[r]]
+                    c_holder[nums[r]] += 1
+                    
+        return res

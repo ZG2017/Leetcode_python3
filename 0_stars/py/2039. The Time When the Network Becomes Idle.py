@@ -1,0 +1,40 @@
+# bfs+math: 
+# ** don't try to dscrible a method with only one function, just try segmentation. 
+
+class Solution:
+    def networkBecomesIdle(self, edges: List[List[int]], patience: List[int]) -> int:
+        from collections import deque
+        
+        connected = dict([(i, []) for i in range(len(patience))])
+        for i,j in edges:
+            connected[i].append(j)
+            connected[j].append(i)
+        
+        holder = dict([(i, 0) for i in range(len(patience))])
+        visited = set([0])
+        stack = deque([(0,0)])
+        while stack:
+            cur_node = stack.popleft()
+            connected_list = connected[cur_node[0]]
+            holder[cur_node[0]] = cur_node[1]
+            for i in connected_list:
+                if i not in visited:
+                    visited.add(i)
+                    stack.append((i, cur_node[1]+1))
+        
+        max_cost = 0
+        for i in holder:
+            if i == 0:
+                continue
+            if 2*holder[i]<=patience[i]:
+                cur_cost = 2*holder[i]
+            else:
+                tmp = 2*holder[i]%patience[i]
+                if tmp == 0:
+                    cur_cost = 4*holder[i] - patience[i]
+                else:
+                    cur_cost = 4*holder[i] -(2*holder[i]%patience[i])
+            if cur_cost > max_cost:
+                max_cost = cur_cost
+        return max_cost+1
+

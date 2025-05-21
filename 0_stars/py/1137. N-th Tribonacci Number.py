@@ -1,0 +1,8 @@
+class Solution:
+    def tribonacci(self, n: int) -> int:
+        res = [0, 1, 1]
+        if n <= 2:
+            return res[n]
+        for i in range(n-3+1):
+            res.append(sum(res[-3:]))
+        return res[-1] 

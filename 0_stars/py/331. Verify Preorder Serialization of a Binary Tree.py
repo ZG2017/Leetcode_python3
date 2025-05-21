@@ -1,0 +1,57 @@
+# mine:
+class Solution:
+    def isValidSerialization(self, preorder):
+        """
+        :type preorder: str
+        :rtype: bool
+        """
+        if not preorder:
+            return False
+        elif preorder == "#":
+            return True
+        preorder = preorder.split(",")
+        stack = [preorder[0]]
+        index = 1
+        end = False
+        while index < len(preorder) and not end:
+            if preorder[index] != "#":
+                stack.append(preorder[index])
+            else:
+                if stack and stack[-1] != "#":
+                    stack.pop()
+                else:
+                    stack.append("#")
+                    end = True
+            index += 1
+        if index == len(preorder) and end and stack == ["#"]:
+            return True
+        else:
+            return False
+        
+
+# updated:
+class Solution:
+    def isValidSerialization(self, preorder):
+        """
+        :type preorder: str
+        :rtype: bool
+        """
+        # count the slots of the tree, initially 1 slot for the root
+        # non null node create 2 slots, consumes 1 slot
+        # null node consumes 1 slot
+        
+        preorder = preorder.split(',')
+        
+        slot = 1
+        
+        for p in preorder:
+            if slot == 0:
+                return False
+            
+            if p == '#':
+                slot -= 1
+            else:
+                slot += 1
+            
+        
+        return slot == 0

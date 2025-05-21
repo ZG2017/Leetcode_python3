@@ -1,0 +1,40 @@
+# greedy, for all the clips whose start_time < cur_end, find the longest clip.
+
+class Solution:
+    def videoStitching(self, clips: List[List[int]], time: int) -> int:
+        sorted_list = sorted(clips, key=lambda x: x[0])
+        cur_start = 0
+        cur_end = 0
+        cur_idx_start, cur_idx_end = 0, 0
+        res = 0
+        i = 0
+        while i < len(sorted_list):
+            if cur_end >= time:
+                return res
+            if sorted_list[i][0] <= cur_end:
+                cur_idx_end += 1
+                i += 1
+            else:
+                cur_start = cur_end
+                if sorted_list[cur_idx_start:cur_idx_end]:
+                    cur_end = max(sorted_list[cur_idx_start:cur_idx_end], key=lambda x:x[1])[1]
+                else:
+                    return -1
+                cur_idx_start, cur_idx_end = i, i
+                res += 1
+        if sorted_list[cur_idx_start:cur_idx_end]:
+            cur_end = max(sorted_list[cur_idx_start:cur_idx_end], key=lambda x:x[1])[1]      
+        else:
+            return -1
+        res += 1
+        
+        if cur_end >= time:
+            return res
+        else:
+            return -1
+                
+            
+                
+        
+        
+        

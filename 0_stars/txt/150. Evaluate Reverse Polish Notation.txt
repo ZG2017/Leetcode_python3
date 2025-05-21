@@ -1,0 +1,51 @@
+mine:
+class Solution:
+    def evalRPN(self, tokens):
+        """
+        :type tokens: List[str]
+        :rtype: int
+        """
+        stack = []
+        for i in range(len(tokens)):
+            if any(j in "0123456789" for j in tokens[i]):
+                if "-" not in tokens[i]:
+                    stack.append(int(tokens[i]))
+                else:
+                    stack.append(-int(tokens[i][1:]))
+            else:
+                b = stack.pop()
+                a = stack.pop()
+                if tokens[i] == "+":
+                    stack.append(a+b)
+                if tokens[i] == "-":
+                    stack.append(a-b)
+                if tokens[i] == "*":
+                    stack.append(a*b)
+                if tokens[i] == "/":
+                    stack.append(int(a/b))
+        return stack[0]
+
+
+updated:(the same but more effective)
+class Solution:
+    def evalRPN(self, tokens):
+        """
+        :type tokens: List[str]
+        :rtype: int
+        """
+        nums = []
+        for t in tokens:
+            if t not in ['+', '-', '*', '/']:
+                nums.append(int(t))
+            else:
+                n2 = nums.pop()
+                n1 = nums.pop()
+                if t == '/':
+                    nums.append(int(n1/n2))
+                elif t == '*':
+                    nums.append(n1 * n2)
+                elif t == '+':
+                    nums.append(n1 + n2)
+                elif t == '-':
+                    nums.append(n1 - n2)
+        return nums[-1]

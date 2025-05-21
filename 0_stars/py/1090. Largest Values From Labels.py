@@ -1,0 +1,50 @@
+# sorted the array separately based on the labels and check the res, but TLE:
+class Solution:
+    def largestValsFromLabels(self, values: List[int], labels: List[int], numWanted: int, useLimit: int) -> int:
+        holder = dict([(i, []) for i in set(labels)])
+        count = dict([(i, 0) for i in set(labels)])
+        res = 0
+        for v, l in zip(values, labels):
+            holder[l].append(v)
+        for i in holder:
+            holder[i] = sorted(holder[i])
+        
+        for i in range(numWanted):
+            if not count:
+                break
+            cur_max = -1
+            cur_label = -1
+            for label in count.keys():
+                if holder[label] and holder[label][-1] > cur_max:
+                    cur_max = holder[label][-1]
+                    cur_label = label
+            if cur_label == -1:
+                break
+            res += holder[cur_label].pop()
+            count[cur_label] += 1
+            if count[cur_label] >= useLimit:
+                count.pop(cur_label)
+        return res
+
+
+# updated:
+# sorted the array as the whole to save time.
+class Solution:
+    def largestValsFromLabels(self, values: List[int], labels: List[int], numWanted: int, useLimit: int) -> int:
+        sorted_total = sorted([(v,l) for v,l in zip(values, labels)], key=lambda x: x[0])
+        count = dict([(i, 0) for i in set(labels)])
+        res = 0
+        
+        for i in range(numWanted):
+            while sorted_total:
+                cur_item = sorted_total.pop()
+                if cur_item[1] in count:
+                    res += cur_item[0]
+                    count[cur_item[1]] += 1
+                    if count[cur_item[1]] == useLimit:
+                        count.pop(cur_item[1])
+                    break
+            if not sorted_total or not count:
+                break
+        return res
+

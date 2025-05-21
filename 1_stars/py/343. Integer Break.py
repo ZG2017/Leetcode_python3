@@ -1,0 +1,43 @@
+# mine: dp
+class Solution(object):
+    def integerBreak(self, n):
+        """
+        :type n: int
+        :rtype: int
+        """
+        if n == 2:
+            return 1
+        elif n == 3:
+            return 2
+        dp = [0 for _ in range(n+1)]
+        dp[1] = 1
+        dp[2] = 2
+        dp[3] = 3
+        dp[4] = 4
+        for i in range(5,n+1):
+            index = 2
+            while index <= int(i/2):
+                dp[i] = max(dp[i],dp[index]*dp[i-index])
+                index += 1
+        return dp[n]
+
+# updated: math solution
+class Solution(object):
+    def integerBreak(self, n):
+        """
+        :type n: int
+        :rtype: int
+        """
+        if n == 3: 
+            return 2
+        if n == 2 or n == 1: 
+            return 1 
+        
+        if n % 3 == 0:
+            return 3 ** (n/3) 
+        
+        if n % 3 == 1: 
+            return 3 ** ((n/3) -1) * 4
+        
+        if n % 3 == 2: 
+            return 3 ** (n/3)  * 2 

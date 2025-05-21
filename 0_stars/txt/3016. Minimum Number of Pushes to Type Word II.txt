@@ -1,0 +1,16 @@
+heap sort
+
+class Solution:
+    def minimumPushes(self, word: str) -> int:
+        from collections import Counter
+        import heapq
+        c = Counter(word)
+        cur_map = [1]*8
+        heapq.heapify(cur_map)
+        res = 0
+        for i, cur_c in sorted(c.items(), key=lambda x:x[1], reverse=True):
+            cur_time =  heapq.heappop(cur_map)
+            res += cur_c * cur_time
+            heapq.heappush(cur_map, cur_time+1)
+        return res
+

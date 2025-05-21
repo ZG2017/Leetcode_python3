@@ -1,0 +1,36 @@
+class Solution:
+    def helper(self, road_map):
+        if road_map[-1] == self.end:
+            self.min_step = min(self.min_step, len(road_map)-1)
+            self.flag = True
+            return 
+        for i in range(8):
+            tmp_end = road_map[-1][i]
+            real_end = self.end[i]
+            if tmp_end != real_end:
+                transformed = road_map[-1][:i]+real_end+road_map[-1][i+1:]
+                if transformed in self.bank_set and transformed not in road_map:
+                    self.helper(road_map+[transformed])
+            else:
+                for j in set(["A", "C", "G", "T"]) - set(real_end):
+                    transformed = road_map[-1][:i]+j+road_map[-1][i+1:]
+                    if transformed in self.bank_set and transformed not in road_map:
+                        self.helper(road_map+[transformed])
+
+        return 
+                
+
+    def minMutation(self, start: str, end: str, bank: List[str]) -> int:
+        if end not in bank:
+            return -1
+        if end == start:
+            return 0
+        self.min_step = float("inf")
+        self.end = end
+        self.bank_set = set(bank)
+        self.flag = False
+        self.helper([start])
+        if not self.flag:
+            return -1
+        return self.min_step
+        

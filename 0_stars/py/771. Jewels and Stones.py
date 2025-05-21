@@ -1,0 +1,8 @@
+class Solution:
+    def numJewelsInStones(self, jewels: str, stones: str) -> int:
+        from collections import Counter
+        C = Counter(stones)
+        res = 0
+        for i in jewels:
+            res += C[i]
+        return res 
