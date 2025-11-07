@@ -15,3 +15,21 @@ class Solution:
                 else:
                     dp[i][j] = min(dp[i-1][j], dp[i-1][j+1], dp[i-1][j-1]) + matrix[i][j]
         return min(dp[-1])
+
+# update dp 
+
+class Solution(object):
+    def minFallingPathSum(self, matrix):
+        """
+        :type matrix: List[List[int]]
+        :rtype: int
+        """
+        n = len(matrix)
+        if n == 1:
+            return matrix[0][0]
+        dp = matrix
+        for i in range(1, n):
+            for j in range(n):
+                left, top, right = max(j-1, 0), j, min(j+1, n-1)
+                dp[i][j] += min(dp[i-1][left], dp[i-1][top], dp[i-1][right])
+        return min(dp[n-1])
