@@ -52,3 +52,32 @@ class Solution:
         return dp[0][1]
 
 
+# update dp with cache
+# at each round, the goal is to maximize the score of the current player
+# the maximize score equals to the stones we can get from the current round plus what is remaining for us after next round
+# since the total number of stones is fixed, what is remaining for us after next round equals to total number of stones minus the maximize the score the other player can get at next round
+class Solution:
+    def stoneGameII(self, piles: List[int]) -> int:
+        prefix_sum = [0]
+        tmp = 0
+        for i in piles:
+            tmp += i
+            prefix_sum.append(tmp)
+
+        @cache
+        def max_score(cur_idx, m):
+            if cur_idx + 2*m >= len(piles):
+                return prefix_sum[-1] - prefix_sum[cur_idx]
+            
+            holder = []
+            for i in range(1, 2*m+1):
+                cur_pre_sum = prefix_sum[i+cur_idx] - prefix_sum[cur_idx]
+                next_M = max(m, i)
+                next_max_score = max_score(i+cur_idx, next_M)
+                remain_total = prefix_sum[-1] - prefix_sum[i+cur_idx]
+                holder.append(cur_pre_sum + remain_total - next_max_score)
+            return max(holder)
+
+        return max_score(0, 1)
+
+
