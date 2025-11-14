@@ -1,20 +1,15 @@
+# bitmask + set of tuples to avoid duplicates
 class Solution:
-    def subsetsWithDup(self, nums):
-        """
-        :type nums: List[int]
-        :rtype: List[List[int]]
-        """
-        res = [[]]
-        nums.sort()
-        index = 0
-        added = []
-        for i in nums:
-            if i not in added:
-                index = len(res)
-                res += [[i]+j for j in res]
-                added += [i]
-            else:
-                tmp = len(res)
-                res += [[i]+j for j in res[index:]]
-                index = tmp
-        return res
+    def subsetsWithDup(self, nums: List[int]) -> List[List[int]]:
+        nums = sorted(nums)
+        n = len(nums)
+        seen = set()
+        
+        for mask in range(1 << n):
+            subset = []
+            for i in range(n):
+                if mask & (1 << i):
+                    subset.append(nums[i])
+            seen.add(tuple(subset))
+
+        return [list(t) for t in seen]
