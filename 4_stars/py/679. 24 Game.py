@@ -1,4 +1,5 @@
 # dfs
+# https://leetcode.com/problems/24-game/solutions/7093770/24-game-o-1-java-c-by-daulat_309-qzsp/
 # At every step, pick two numbers a and b.
 # Replace them with all possible results of a op b.
 # Keep repeating until only one number remains.
