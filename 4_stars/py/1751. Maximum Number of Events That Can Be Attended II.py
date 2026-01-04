@@ -1,3 +1,5 @@
+# knapsack problem variant
+
 # TLE solution: linear search for the last non-overlapping event
 
 class Solution:
